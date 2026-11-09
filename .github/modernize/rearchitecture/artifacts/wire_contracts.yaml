@@ -1,0 +1,17 @@
+contracts:
+  - name: "Backend health status"
+    unit: health-api
+    type: rest
+    stability: must_preserve
+    source_loc: "backend/src/main/java/com/smartinvest/backend/controller/HealthController.java:9"
+    contract:
+      method: "GET"
+      path: "/api/health"
+      request: "No request body or parameters"
+      response: "HTTP 200 with plain-text body 'SmartInvest API Running'"
+      error: "No explicit error contract in the controller"
+      auth: "Public; permitted by SecurityConfig"
+    target_contract:
+      method: "GET /api/health -> HTTP 200 text/plain"
+      notes: "Existing health route; not a watchlist API contract."
+    semantic_divergence: []

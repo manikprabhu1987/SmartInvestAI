@@ -1,0 +1,27 @@
+unit: health-api
+bindings:
+  - type: annotation
+    name: "@RestController"
+    source_loc: "backend/src/main/java/com/smartinvest/backend/controller/HealthController.java:6"
+    target: "HealthController"
+    must_appear_in_target: true
+    notes: "Registers the class as a Spring REST controller."
+  - type: route-declaration
+    name: "@GetMapping(\"/api/health\")"
+    source_loc: "backend/src/main/java/com/smartinvest/backend/controller/HealthController.java:9"
+    target: "HealthController.health"
+    must_appear_in_target: true
+    notes: "Maps the existing public GET health route."
+  - type: annotation
+    name: "@Configuration / @Bean SecurityFilterChain"
+    source_loc: "backend/src/main/java/com/smartinvest/backend/config/SecurityConfig.java:9"
+    target: "SecurityConfig.securityFilterChain"
+    must_appear_in_target: true
+    notes: "Permits /api/health, requires authentication for other requests, and configures form login."
+  - type: annotation
+    name: "@Configuration / @Bean CorsFilter"
+    source_loc: "backend/src/main/java/com/smartinvest/backend/config/CorsConfig.java:10"
+    target: "CorsConfig.corsFilter"
+    must_appear_in_target: true
+    notes: "Registers the existing CORS filter for all routes."
+runtime_config: []

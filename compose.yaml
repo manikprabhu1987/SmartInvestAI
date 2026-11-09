@@ -1,0 +1,45 @@
+services:
+
+  mysql:
+
+    image: mysql:8.4
+
+    container_name: smartinvest-mysql
+
+    environment:
+      MYSQL_DATABASE: smart_invest_ai
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: smartinvest
+      MYSQL_PASSWORD: smartinvest123
+
+    ports:
+      - "3306:3306"
+
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+
+    build:
+      context: ./backend
+
+    container_name: smartinvest-backend
+
+    ports:
+      - "8080:8080"
+
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/smart_invest_ai
+      SPRING_DATASOURCE_USERNAME: smartinvest
+      SPRING_DATASOURCE_PASSWORD: smartinvest123
+
+      JWT_SECRET: dev-secret-key
+      JWT_ISSUER: smart-invest-ai
+      JWT_AUDIENCE: smart-invest-client
+
+    depends_on:
+      mysql:
+        condition: service_healthy

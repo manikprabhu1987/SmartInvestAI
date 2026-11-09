@@ -1,0 +1,29 @@
+units:
+  - name: health-api
+    trigger: route
+    trigger_detail: "GET /api/health"
+    source_anchors:
+      - path: backend/src/main/java/com/smartinvest/backend/controller/HealthController.java
+        line: 9
+    exported_signature:
+      - method: "String HealthController.health()"
+        source_loc: "backend/src/main/java/com/smartinvest/backend/controller/HealthController.java:10"
+        stability: must_preserve
+    dynamic_entrypoints:
+      - target: "com.smartinvest.backend.controller.HealthController"
+        mechanism: annotation-scan
+        source_loc: "backend/src/main/java/com/smartinvest/backend/controller/HealthController.java:6"
+    depends_on: []
+    shared_refs: []
+  - name: smartinvest-home-page
+    trigger: page
+    trigger_detail: "React root page rendered from frontend/src/main.tsx"
+    source_anchors:
+      - path: frontend/src/main.tsx
+        line: 6
+      - path: frontend/src/App.tsx
+        line: 1
+    exported_signature: []
+    dynamic_entrypoints: []
+    depends_on: []
+    shared_refs: []

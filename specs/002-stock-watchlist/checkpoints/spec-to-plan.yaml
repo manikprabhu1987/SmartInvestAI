@@ -1,0 +1,245 @@
+metadata:
+  generated: "2026-11-09"
+  source_spec: "specs/002-stock-watchlist/spec.md"
+  target_plan: "specs/002-stock-watchlist/plan.md"
+
+summary:
+  total_requirements: 16
+  covered_requirements: 16
+  missing_requirements: 0
+  coverage_percentage: 100.0
+
+requirements:
+  - req_id: "REQ-001"
+    req_description: "Add a stock to the authenticated user's watchlist"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-3"
+      phase_name: "User Story 1 - Add a Stock"
+      items:
+        - item_id: "3.1"
+          description: "Implement stock and watchlist persistence rules"
+        - item_id: "3.2"
+          description: "Expose the add-stock API"
+    notes: ""
+  - req_id: "REQ-002"
+    req_description: "Validate supported stock symbols and reject invalid or unknown symbols"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-3"
+      phase_name: "User Story 1 - Add a Stock"
+      items:
+        - item_id: "3.1"
+          description: "Implement active catalog lookup and symbol validation"
+        - item_id: "3.2"
+          description: "Return contract-defined validation and unknown-stock errors"
+        - item_id: "6.1"
+          description: "Verify catalog behavior and acceptance tests"
+    notes: ""
+  - req_id: "REQ-003"
+    req_description: "Prevent duplicate entries per user, including concurrent adds"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-3"
+      phase_name: "User Story 1 - Add a Stock"
+      items:
+        - item_id: "2.2"
+          description: "Add the unique per-user stock database constraint"
+        - item_id: "3.1"
+          description: "Map uniqueness conflicts to duplicate behavior"
+        - item_id: "3.2"
+          description: "Expose duplicate conflict response"
+    notes: ""
+  - req_id: "REQ-004"
+    req_description: "Retrieve an empty or populated personal watchlist"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-4"
+      phase_name: "User Story 2 - View and Remove Stocks"
+      items:
+        - item_id: "4.1"
+          description: "Implement owner-scoped list behavior"
+        - item_id: "4.2"
+          description: "Expose GET /api/v1/watchlist"
+    notes: ""
+  - req_id: "REQ-005"
+    req_description: "Remove an owned stock and report missing entries"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-4"
+      phase_name: "User Story 2 - View and Remove Stocks"
+      items:
+        - item_id: "4.1"
+          description: "Implement owner-scoped delete and not-found behavior"
+        - item_id: "4.2"
+          description: "Expose DELETE /api/v1/watchlist/{symbol}"
+    notes: ""
+  - req_id: "REQ-006"
+    req_description: "Search the catalog by symbol or company name"
+    priority: "P2"
+    plan_mapping:
+      phase: "Phase-5"
+      phase_name: "User Story 3 - Search Stocks"
+      items:
+        - item_id: "5.1"
+          description: "Implement active catalog search and pagination"
+        - item_id: "5.2"
+          description: "Expose GET /api/v1/stocks/search"
+        - item_id: "6.1"
+          description: "Verify search against a 1,000-row catalog"
+    notes: ""
+  - req_id: "REQ-007"
+    req_description: "Reject blank search queries"
+    priority: "P2"
+    plan_mapping:
+      phase: "Phase-5"
+      phase_name: "User Story 3 - Search Stocks"
+      items:
+        - item_id: "5.1"
+          description: "Validate trimmed search queries"
+        - item_id: "5.2"
+          description: "Return the documented query validation response"
+    notes: ""
+  - req_id: "REQ-008"
+    req_description: "Return actionable non-sensitive errors"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-2"
+      phase_name: "Foundational Authentication and Persistence"
+      items:
+        - item_id: "2.4"
+          description: "Standardize authentication, validation, and dependency errors"
+        - item_id: "3.2"
+          description: "Map add-stock failure conditions"
+        - item_id: "4.2"
+          description: "Map list/remove failure conditions"
+        - item_id: "5.2"
+          description: "Map search failure conditions"
+    notes: ""
+  - req_id: "REQ-009"
+    req_description: "Expose watchlist and stock search through REST APIs"
+    priority: "P1"
+    plan_mapping:
+      phase: "Multiple"
+      phase_name: "Setup and user-story phases"
+      items:
+        - item_id: "1.1"
+          description: "Align the backend REST build baseline"
+        - item_id: "3.2"
+          description: "Expose add-stock route"
+        - item_id: "4.2"
+          description: "Expose list/remove routes"
+        - item_id: "5.2"
+          description: "Expose stock search route"
+    notes: ""
+  - req_id: "REQ-010"
+    req_description: "Persist stock catalog and watchlist entries in MySQL"
+    priority: "P1"
+    plan_mapping:
+      phase: "Multiple"
+      phase_name: "Setup and persistence phases"
+      items:
+        - item_id: "1.2"
+          description: "Configure MySQL and migration settings"
+        - item_id: "1.3"
+          description: "Provide containerized MySQL runtime"
+        - item_id: "2.2"
+          description: "Create migration-managed schema"
+        - item_id: "3.1"
+          description: "Implement catalog and watchlist persistence"
+    notes: ""
+  - req_id: "REQ-011"
+    req_description: "Restrict every watchlist operation to the authenticated owner"
+    priority: "P1"
+    plan_mapping:
+      phase: "Multiple"
+      phase_name: "Authentication and watchlist ownership phases"
+      items:
+        - item_id: "2.3"
+          description: "Issue JWTs identifying the authenticated user"
+        - item_id: "2.4"
+          description: "Enforce JWT authentication and principal-derived ownership"
+        - item_id: "3.1"
+          description: "Apply owner identity to add operations"
+        - item_id: "4.1"
+          description: "Apply owner-scoped list/remove behavior"
+    notes: ""
+  - req_id: "REQ-012"
+    req_description: "Add JUnit 5 unit tests for watchlist behavior"
+    priority: "P1"
+    plan_mapping:
+      phase: "Multiple"
+      phase_name: "Test and user-story phases"
+      items:
+        - item_id: "2.1"
+          description: "Establish unit and integration test infrastructure"
+        - item_id: "3.2"
+          description: "Add add-stock API tests"
+        - item_id: "4.2"
+          description: "Add list/remove API tests"
+        - item_id: "5.2"
+          description: "Add search API tests"
+    notes: ""
+  - req_id: "REQ-013"
+    req_description: "Register users with unique email and adaptive password hashing"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-2"
+      phase_name: "Foundational Authentication and Persistence"
+      items:
+        - item_id: "2.2"
+          description: "Persist users with unique email"
+        - item_id: "2.3"
+          description: "Register accounts and hash passwords with BCrypt"
+    notes: ""
+  - req_id: "REQ-014"
+    req_description: "Authenticate credentials and issue signed expiring JWTs"
+    priority: "P1"
+    plan_mapping:
+      phase: "Multiple"
+      phase_name: "Setup and foundational authentication"
+      items:
+        - item_id: "1.1"
+          description: "Add compatible JWT dependencies"
+        - item_id: "2.3"
+          description: "Implement credential verification and JWT issuance"
+        - item_id: "2.4"
+          description: "Validate JWTs on protected routes"
+    notes: ""
+  - req_id: "REQ-015"
+    req_description: "Invalidate JWTs on logout and reject revoked tokens"
+    priority: "P1"
+    plan_mapping:
+      phase: "Multiple"
+      phase_name: "Setup and foundational authentication"
+      items:
+        - item_id: "1.2"
+          description: "Configure external JWT signing material"
+        - item_id: "2.2"
+          description: "Persist revoked token identifiers"
+        - item_id: "2.3"
+          description: "Revoke the active JWT on logout"
+    notes: ""
+  - req_id: "REQ-016"
+    req_description: "Add JUnit 5 tests for authentication and authorization"
+    priority: "P1"
+    plan_mapping:
+      phase: "Multiple"
+      phase_name: "Setup and foundational authentication"
+      items:
+        - item_id: "1.1"
+          description: "Configure JUnit 5 and Mockito test dependencies"
+        - item_id: "2.1"
+          description: "Set up test infrastructure"
+        - item_id: "2.3"
+          description: "Test authentication service and JWT lifecycle"
+    notes: ""
+
+missing_requirements: []
+orphan_plan_items: []
+
+validation:
+  passed: true
+  errors: []
+  warnings:
+    - "Production stock-catalog data source/import remains an operational prerequisite."

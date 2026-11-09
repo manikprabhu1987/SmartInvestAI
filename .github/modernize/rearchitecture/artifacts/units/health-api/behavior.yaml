@@ -1,0 +1,6 @@
+unit: health-api
+side_effects: []
+branches: []
+error_paths: []
+concurrency:
+  model: sync
