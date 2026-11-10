@@ -410,6 +410,7 @@ components:
           enum:
             - EMAIL_ALREADY_REGISTERED
             - INVALID_CREDENTIALS
+            - VALIDATION_ERROR
             - TOKEN_REVOKED
             - INVALID_SYMBOL
             - INVALID_SEARCH_QUERY
@@ -419,3 +420,4 @@ components:
             - UNAUTHENTICATED
             - CATALOG_UNAVAILABLE
             - PERSISTENCE_UNAVAILABLE
+            - CONFLICT

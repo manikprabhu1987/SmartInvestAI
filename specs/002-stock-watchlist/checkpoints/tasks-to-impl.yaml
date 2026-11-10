@@ -1,0 +1,626 @@
+# Tasks-to-Implementation Traceability Checkpoint
+metadata:
+  generated: "2026-11-09"
+  source_tasks: "specs/002-stock-watchlist/plan.md#task-breakdown"
+  last_updated: "2026-11-09"
+
+summary:
+  total_tasks: 29
+  completed_tasks: 29
+  in_progress_tasks: 0
+  pending_tasks: 0
+  completion_percentage: 100.0
+
+tasks:
+  - task_id: "T001"
+    description: "Align Java/Spring baseline and backend dependencies"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "backend/pom.xml"
+          changes:
+            - change_type: "modified"
+              description: "Configured backend dependencies, JUnit, and Docker-compatible Testcontainers"
+    upstream_trace:
+      plan_item: "1.1"
+      requirements: ["REQ-009", "REQ-012", "REQ-014", "REQ-016"]
+      full_trace: "REQ-009/012/014/016 -> Phase-1.1 -> T001 -> backend/pom.xml"
+  - task_id: "T002"
+    description: "Configure externalized MySQL and JWT runtime settings"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "backend/src/main/resources/application.properties"
+          changes:
+            - change_type: "modified"
+              description: "Required database and JWT settings from environment configuration"
+        - file: "backend/src/main/java/com/smartinvest/backend/config/JwtProperties.java"
+          changes:
+            - change_type: "modified"
+              description: "Validated configured signing key, issuer, and audience"
+    upstream_trace:
+      plan_item: "1.2"
+      requirements: ["REQ-010", "REQ-013", "REQ-014", "REQ-015"]
+      full_trace: "REQ-010/013/014/015 -> Phase-1.2 -> T002 -> runtime configuration"
+  - task_id: "T003"
+    description: "Add secure Docker and Compose runtime configuration"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "backend/Dockerfile"
+          changes:
+            - change_type: "created"
+              description: "Added multi-stage, non-root backend image"
+        - file: "backend/.dockerignore"
+          changes:
+            - change_type: "created"
+              description: "Excluded local and build-only files from the image context"
+        - file: ".gitignore"
+          changes:
+            - change_type: "created"
+              description: "Excluded local secrets and build outputs"
+        - file: ".env.example"
+          changes:
+            - change_type: "created"
+              description: "Documented required runtime variables without credentials"
+        - file: "compose.yaml"
+          changes:
+            - change_type: "created"
+              description: "Added MySQL/backend services, required environment, and health checks"
+    upstream_trace:
+      plan_item: "1.3"
+      requirements: ["REQ-010"]
+      full_trace: "REQ-010 -> Phase-1.3 -> T003 -> Docker runtime files"
+  - task_id: "T004"
+    description: "Establish MySQL Testcontainers integration-test infrastructure"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "backend/src/test/java/com/smartinvest/backend/support/AbstractMysqlIntegrationTest.java"
+          changes:
+            - change_type: "created"
+              description: "Added MySQL test database setup, migration support, cleanup, and H2 fallback"
+        - file: "backend/src/test/resources/application-h2-test.properties"
+          changes:
+            - change_type: "created"
+              description: "Added fallback test datasource configuration"
+    upstream_trace:
+      plan_item: "2.1"
+      requirements: ["REQ-012", "REQ-016"]
+      full_trace: "REQ-012/016 -> Phase-2.1 -> T004 -> integration-test support"
+  - task_id: "T005"
+    description: "Write authentication service unit tests"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "backend/src/test/java/com/smartinvest/backend/service/AuthServiceTest.java"
+          changes:
+            - change_type: "created"
+              description: "Tested registration, credential verification, password hashing, and logout revocation"
+    verification:
+      notes: "Included in the final 33-test successful Maven verify run."
+    upstream_trace:
+      plan_item: "2.3"
+      requirements: ["REQ-013", "REQ-014", "REQ-015", "REQ-016"]
+      full_trace: "REQ-013/014/015/016 -> Phase-2.3 -> T005 -> AuthServiceTest.java"
+  - task_id: "T006"
+    description: "Write JWT lifecycle unit tests"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "backend/src/test/java/com/smartinvest/backend/security/JwtServiceTest.java"
+          changes:
+            - change_type: "created"
+              description: "Tested JWT claims, signature, expiry, issuer/audience, and revocation"
+    verification:
+      notes: "Included in the final 33-test successful Maven verify run."
+    upstream_trace:
+      plan_item: "2.3"
+      requirements: ["REQ-013", "REQ-014", "REQ-015", "REQ-016"]
+      full_trace: "REQ-013/014/015/016 -> Phase-2.3 -> T006 -> JwtServiceTest.java"
+  - task_id: "T007"
+    description: "Write authentication API integration tests"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "backend/src/test/java/com/smartinvest/backend/controller/AuthApiIntegrationTest.java"
+          changes:
+            - change_type: "created"
+              description: "Tested registration, login, protected requests, logout, and token revocation"
+    verification:
+      notes: "3 MySQL-backed integration tests passed."
+    upstream_trace:
+      plan_item: "2.3"
+      requirements: ["REQ-013", "REQ-014", "REQ-015", "REQ-016"]
+      full_trace: "REQ-013/014/015/016 -> Phase-2.3 -> T007 -> AuthApiIntegrationTest.java"
+  - task_id: "T008"
+    description: "Create Flyway authentication, stock, and watchlist schema"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "backend/src/main/resources/db/migration/V1__create_auth_stock_watchlist_tables.sql"
+          changes:
+            - change_type: "created"
+              description: "Added tables, foreign keys, and uniqueness constraints"
+    upstream_trace:
+      plan_item: "2.2"
+      requirements: ["REQ-010", "REQ-013", "REQ-015"]
+      full_trace: "REQ-010/013/015 -> Phase-2.2 -> T008 -> Flyway migration"
+  - task_id: "T009"
+    description: "Implement authentication entities and repositories"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "backend/src/main/java/com/smartinvest/backend/entity/User.java"
+          changes:
+            - change_type: "created"
+              description: "Added persisted user model"
+        - file: "backend/src/main/java/com/smartinvest/backend/entity/RevokedToken.java"
+          changes:
+            - change_type: "created"
+              description: "Added persisted JWT revocation model"
+        - file: "backend/src/main/java/com/smartinvest/backend/repository/UserRepository.java"
+          changes:
+            - change_type: "created"
+              description: "Added user persistence queries"
+        - file: "backend/src/main/java/com/smartinvest/backend/repository/RevokedTokenRepository.java"
+          changes:
+            - change_type: "created"
+              description: "Added revoked-token persistence queries"
+    upstream_trace:
+      plan_item: "2.2"
+      requirements: ["REQ-010", "REQ-013", "REQ-015"]
+      full_trace: "REQ-010/013/015 -> Phase-2.2 -> T009 -> authentication persistence"
+  - task_id: "T010"
+    description: "Implement authentication and JWT lifecycle services"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "backend/src/main/java/com/smartinvest/backend/service/AuthService.java"
+          changes:
+            - change_type: "created"
+              description: "Added registration, credential verification, and logout behavior"
+        - file: "backend/src/main/java/com/smartinvest/backend/security/JwtService.java"
+          changes:
+            - change_type: "created"
+              description: "Added JWT issuance, validation, and revocation checks"
+    upstream_trace:
+      plan_item: "2.3"
+      requirements: ["REQ-013", "REQ-014", "REQ-015", "REQ-016"]
+      full_trace: "REQ-013/014/015/016 -> Phase-2.3 -> T010 -> authentication services"
+  - task_id: "T011"
+    description: "Add authentication DTOs and REST endpoints"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "backend/src/main/java/com/smartinvest/backend/dto/"
+          changes:
+            - change_type: "created"
+              description: "Added registration, login, profile, and token DTOs"
+        - file: "backend/src/main/java/com/smartinvest/backend/controller/AuthController.java"
+          changes:
+            - change_type: "created"
+              description: "Added registration, login, and logout routes"
+    upstream_trace:
+      plan_item: "2.3"
+      requirements: ["REQ-013", "REQ-014", "REQ-015", "REQ-016"]
+      full_trace: "REQ-013/014/015/016 -> Phase-2.3 -> T011 -> authentication API"
+  - task_id: "T012"
+    description: "Secure API routes with stateless JWT authentication"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "backend/src/main/java/com/smartinvest/backend/config/SecurityConfig.java"
+          changes:
+            - change_type: "created"
+              description: "Configured public auth routes, protected APIs, and stateless security"
+        - file: "backend/src/main/java/com/smartinvest/backend/security/JwtAuthenticationFilter.java"
+          changes:
+            - change_type: "created"
+              description: "Authenticated requests from verified JWT principals"
+    upstream_trace:
+      plan_item: "2.4"
+      requirements: ["REQ-008", "REQ-011", "REQ-014", "REQ-015"]
+      full_trace: "REQ-008/011/014/015 -> Phase-2.4 -> T012 -> JWT route security"
+  - task_id: "T013"
+    description: "Return consistent safe Problem Details errors"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "backend/src/main/java/com/smartinvest/backend/exception/ApiExceptionHandler.java"
+          changes:
+            - change_type: "created"
+              description: "Mapped expected validation and authentication errors to Problem Details"
+    upstream_trace:
+      plan_item: "2.4"
+      requirements: ["REQ-008", "REQ-011", "REQ-014", "REQ-015"]
+      full_trace: "REQ-008/011/014/015 -> Phase-2.4 -> T013 -> API error handler"
+  - task_id: "T014"
+    description: "Write stock catalog service unit tests"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "backend/src/test/java/com/smartinvest/backend/service/StockCatalogServiceTest.java"
+          changes:
+            - change_type: "created"
+              description: "Tested symbol normalization, catalog validation, and search behavior"
+    verification:
+      notes: "5 stock catalog service tests passed."
+    upstream_trace:
+      plan_item: "3.1"
+      requirements: ["REQ-001", "REQ-002", "REQ-003", "REQ-010", "REQ-011"]
+      full_trace: "REQ-001/002/003/010/011 -> Phase-3.1 -> T014 -> StockCatalogServiceTest.java"
+  - task_id: "T015"
+    description: "Write watchlist service unit tests"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "backend/src/test/java/com/smartinvest/backend/service/WatchlistServiceTest.java"
+          changes:
+            - change_type: "created"
+              description: "Tested add, ownership, duplicate, list, and removal behavior"
+    verification:
+      notes: "6 watchlist service tests passed."
+    upstream_trace:
+      plan_item: "3.1"
+      requirements: ["REQ-001", "REQ-002", "REQ-003", "REQ-010", "REQ-011"]
+      full_trace: "REQ-001/002/003/010/011 -> Phase-3.1 -> T015 -> WatchlistServiceTest.java"
+  - task_id: "T016"
+    description: "Write add-stock API integration tests"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "backend/src/test/java/com/smartinvest/backend/controller/WatchlistApiIntegrationTest.java"
+          changes:
+            - change_type: "created"
+              description: "Tested add success, invalid/unknown/duplicate symbols, and persistence"
+    verification:
+      notes: "Covered by 6 passing MySQL-backed watchlist API integration tests."
+    upstream_trace:
+      plan_item: "3.2"
+      requirements: ["REQ-001", "REQ-002", "REQ-003", "REQ-008", "REQ-009", "REQ-012"]
+      full_trace: "REQ-001/002/003/008/009/012 -> Phase-3.2 -> T016 -> WatchlistApiIntegrationTest.java"
+  - task_id: "T017"
+    description: "Implement stock and watchlist entities and repositories"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "backend/src/main/java/com/smartinvest/backend/entity/Stock.java"
+          changes:
+            - change_type: "created"
+              description: "Added stock catalog model"
+        - file: "backend/src/main/java/com/smartinvest/backend/entity/WatchlistEntry.java"
+          changes:
+            - change_type: "created"
+              description: "Added persisted watchlist entry model"
+        - file: "backend/src/main/java/com/smartinvest/backend/repository/StockRepository.java"
+          changes:
+            - change_type: "created"
+              description: "Added stock lookup and search queries"
+        - file: "backend/src/main/java/com/smartinvest/backend/repository/WatchlistEntryRepository.java"
+          changes:
+            - change_type: "created"
+              description: "Added owner-scoped watchlist persistence queries"
+    upstream_trace:
+      plan_item: "3.1"
+      requirements: ["REQ-001", "REQ-002", "REQ-003", "REQ-010", "REQ-011"]
+      full_trace: "REQ-001/002/003/010/011 -> Phase-3.1 -> T017 -> stock/watchlist persistence"
+  - task_id: "T018"
+    description: "Implement catalog validation and watchlist service behavior"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "backend/src/main/java/com/smartinvest/backend/service/StockCatalogService.java"
+          changes:
+            - change_type: "created"
+              description: "Added canonical symbol validation and catalog search behavior"
+        - file: "backend/src/main/java/com/smartinvest/backend/service/WatchlistService.java"
+          changes:
+            - change_type: "created"
+              description: "Added owner-scoped add, list, and remove operations"
+    upstream_trace:
+      plan_item: "3.1"
+      requirements: ["REQ-001", "REQ-002", "REQ-003", "REQ-010", "REQ-011"]
+      full_trace: "REQ-001/002/003/010/011 -> Phase-3.1 -> T018 -> catalog/watchlist services"
+  - task_id: "T019"
+    description: "Expose the add-stock REST endpoint"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "backend/src/main/java/com/smartinvest/backend/dto/"
+          changes:
+            - change_type: "created"
+              description: "Added add-stock and watchlist response DTOs"
+        - file: "backend/src/main/java/com/smartinvest/backend/controller/WatchlistController.java"
+          changes:
+            - change_type: "created"
+              description: "Added POST /api/v1/watchlist"
+    upstream_trace:
+      plan_item: "3.2"
+      requirements: ["REQ-001", "REQ-002", "REQ-003", "REQ-008", "REQ-009", "REQ-012"]
+      full_trace: "REQ-001/002/003/008/009/012 -> Phase-3.2 -> T019 -> add-stock API"
+  - task_id: "T020"
+    description: "Test watchlist list and removal service behavior"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "backend/src/test/java/com/smartinvest/backend/service/WatchlistServiceTest.java"
+          changes:
+            - change_type: "modified"
+              description: "Added empty/populated list, owner isolation, and removal tests"
+    verification:
+      notes: "Included in the 6 passing watchlist service tests."
+    upstream_trace:
+      plan_item: "4.1"
+      requirements: ["REQ-004", "REQ-005", "REQ-008", "REQ-011", "REQ-012"]
+      full_trace: "REQ-004/005/008/011/012 -> Phase-4.1 -> T020 -> WatchlistServiceTest.java"
+  - task_id: "T021"
+    description: "Test watchlist ownership, listing, and removal APIs"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "backend/src/test/java/com/smartinvest/backend/controller/WatchlistApiIntegrationTest.java"
+          changes:
+            - change_type: "modified"
+              description: "Added cross-user isolation and add/view/remove flow tests"
+    verification:
+      notes: "Included in the 6 passing MySQL-backed watchlist API integration tests."
+    upstream_trace:
+      plan_item: "4.2"
+      requirements: ["REQ-004", "REQ-005", "REQ-008", "REQ-009", "REQ-011", "REQ-012"]
+      full_trace: "REQ-004/005/008/009/011/012 -> Phase-4.2 -> T021 -> WatchlistApiIntegrationTest.java"
+  - task_id: "T022"
+    description: "Implement owner-scoped watchlist listing and deletion"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "backend/src/main/java/com/smartinvest/backend/repository/WatchlistEntryRepository.java"
+          changes:
+            - change_type: "modified"
+              description: "Added owner-scoped list and delete access"
+        - file: "backend/src/main/java/com/smartinvest/backend/service/WatchlistService.java"
+          changes:
+            - change_type: "modified"
+              description: "Added empty-list, removal, and not-found behavior"
+    upstream_trace:
+      plan_item: "4.1"
+      requirements: ["REQ-004", "REQ-005", "REQ-008", "REQ-011", "REQ-012"]
+      full_trace: "REQ-004/005/008/011/012 -> Phase-4.1 -> T022 -> owner-scoped services"
+  - task_id: "T023"
+    description: "Expose watchlist list and remove endpoints"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "backend/src/main/java/com/smartinvest/backend/controller/WatchlistController.java"
+          changes:
+            - change_type: "modified"
+              description: "Added GET /api/v1/watchlist and DELETE /api/v1/watchlist/{symbol}"
+        - file: "backend/src/main/java/com/smartinvest/backend/dto/RemoveWatchlistStockResponse.java"
+          changes:
+            - change_type: "created"
+              description: "Added removal response DTO"
+    upstream_trace:
+      plan_item: "4.2"
+      requirements: ["REQ-004", "REQ-005", "REQ-008", "REQ-009", "REQ-011", "REQ-012"]
+      full_trace: "REQ-004/005/008/009/011/012 -> Phase-4.2 -> T023 -> list/remove API"
+  - task_id: "T024"
+    description: "Test catalog search service behavior"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "backend/src/test/java/com/smartinvest/backend/service/StockCatalogServiceTest.java"
+          changes:
+            - change_type: "modified"
+              description: "Added blank-query, bounds, inactive-stock, and ordering tests"
+    verification:
+      notes: "Included in the 5 passing stock catalog service tests."
+    upstream_trace:
+      plan_item: "5.1"
+      requirements: ["REQ-006", "REQ-007", "REQ-008", "REQ-010"]
+      full_trace: "REQ-006/007/008/010 -> Phase-5.1 -> T024 -> StockCatalogServiceTest.java"
+  - task_id: "T025"
+    description: "Test stock search API behavior and performance"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "backend/src/test/java/com/smartinvest/backend/controller/StockSearchApiIntegrationTest.java"
+          changes:
+            - change_type: "created"
+              description: "Tested symbol/name search, pagination, blank queries, and 1,000-row search"
+    verification:
+      notes: "3 MySQL-backed stock search integration tests passed."
+    upstream_trace:
+      plan_item: "5.2"
+      requirements: ["REQ-006", "REQ-007", "REQ-008", "REQ-009", "REQ-012"]
+      full_trace: "REQ-006/007/008/009/012 -> Phase-5.2 -> T025 -> StockSearchApiIntegrationTest.java"
+  - task_id: "T026"
+    description: "Implement paginated catalog search"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "backend/src/main/java/com/smartinvest/backend/repository/StockRepository.java"
+          changes:
+            - change_type: "modified"
+              description: "Added active-stock, case-insensitive paginated search"
+        - file: "backend/src/main/java/com/smartinvest/backend/service/StockCatalogService.java"
+          changes:
+            - change_type: "modified"
+              description: "Added query validation, pagination bounds, and deterministic ordering"
+    upstream_trace:
+      plan_item: "5.1"
+      requirements: ["REQ-006", "REQ-007", "REQ-008", "REQ-010"]
+      full_trace: "REQ-006/007/008/010 -> Phase-5.1 -> T026 -> catalog search"
+  - task_id: "T027"
+    description: "Expose stock search REST endpoint"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "backend/src/main/java/com/smartinvest/backend/dto/StockSearchPageResponse.java"
+          changes:
+            - change_type: "created"
+              description: "Added paginated search response DTO"
+        - file: "backend/src/main/java/com/smartinvest/backend/controller/StockController.java"
+          changes:
+            - change_type: "created"
+              description: "Added GET /api/v1/stocks/search"
+    upstream_trace:
+      plan_item: "5.2"
+      requirements: ["REQ-006", "REQ-007", "REQ-008", "REQ-009", "REQ-012"]
+      full_trace: "REQ-006/007/008/009/012 -> Phase-5.2 -> T027 -> stock search API"
+  - task_id: "T028"
+    description: "Run backend verification and report test outcomes"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "specs/002-stock-watchlist/plan.md"
+          changes:
+            - change_type: "modified"
+              description: "Recorded completed verification and the clean-phase limitation"
+    verification:
+      build_passed: true
+      test_results:
+        command: "mvn verify"
+        passed: 33
+        failed: 0
+        skipped: 0
+        failures: []
+      notes: "MySQL Testcontainers integration and unit tests passed. A prior mvn clean verify attempt could not remove a locked backend/target directory; a subsequent mvn verify succeeded."
+    upstream_trace:
+      plan_item: "6.1"
+      requirements: ["REQ-002", "REQ-006", "REQ-008", "REQ-010", "REQ-011", "REQ-012", "REQ-016"]
+      full_trace: "REQ-002/006/008/010/011/012/016 -> Phase-6.1 -> T028 -> successful Maven verify"
+  - task_id: "T029"
+    description: "Build and verify the backend/MySQL Docker runtime"
+    status: "completed"
+    verification:
+      build_passed: true
+      notes: "Compose startup, API health, auth flow, protected watchlist/search, runtime-only secrets, and non-root container identity were verified; temporary validation resources were removed."
+    upstream_trace:
+      plan_item: "6.1"
+      requirements: ["REQ-002", "REQ-006", "REQ-008", "REQ-010", "REQ-011", "REQ-012", "REQ-016"]
+      full_trace: "REQ-002/006/008/010/011/012/016 -> Phase-6.1 -> T029 -> Docker runtime verification"
+
+pending_tasks: []
+untracked_changes: []
+
+traceability_chain:
+  - chain_id: "TRACE-001"
+    requirement: "REQ-001"
+    plan_phase: "Phase-3"
+    plan_item: "3.1"
+    tasks: ["T014", "T015", "T017", "T018", "T016", "T019"]
+    files: ["backend/src/main/java/com/smartinvest/backend/service/WatchlistService.java", "backend/src/main/java/com/smartinvest/backend/controller/WatchlistController.java"]
+    status: "complete"
+  - chain_id: "TRACE-002"
+    requirement: "REQ-002"
+    plan_phase: "Phase-3"
+    plan_item: "3.1"
+    tasks: ["T014", "T016", "T017", "T018", "T028", "T029"]
+    files: ["backend/src/main/java/com/smartinvest/backend/service/StockCatalogService.java", "backend/src/main/resources/db/migration/V1__create_auth_stock_watchlist_tables.sql"]
+    status: "complete"
+  - chain_id: "TRACE-003"
+    requirement: "REQ-003"
+    plan_phase: "Phase-3"
+    plan_item: "3.1"
+    tasks: ["T008", "T015", "T016", "T017", "T018", "T019"]
+    files: ["backend/src/main/resources/db/migration/V1__create_auth_stock_watchlist_tables.sql", "backend/src/main/java/com/smartinvest/backend/service/WatchlistService.java"]
+    status: "complete"
+  - chain_id: "TRACE-004"
+    requirement: "REQ-004"
+    plan_phase: "Phase-4"
+    plan_item: "4.1"
+    tasks: ["T020", "T021", "T022", "T023"]
+    files: ["backend/src/main/java/com/smartinvest/backend/service/WatchlistService.java", "backend/src/main/java/com/smartinvest/backend/controller/WatchlistController.java"]
+    status: "complete"
+  - chain_id: "TRACE-005"
+    requirement: "REQ-005"
+    plan_phase: "Phase-4"
+    plan_item: "4.1"
+    tasks: ["T020", "T021", "T022", "T023"]
+    files: ["backend/src/main/java/com/smartinvest/backend/service/WatchlistService.java", "backend/src/main/java/com/smartinvest/backend/controller/WatchlistController.java"]
+    status: "complete"
+  - chain_id: "TRACE-006"
+    requirement: "REQ-006"
+    plan_phase: "Phase-5"
+    plan_item: "5.1"
+    tasks: ["T024", "T025", "T026", "T027", "T028", "T029"]
+    files: ["backend/src/main/java/com/smartinvest/backend/service/StockCatalogService.java", "backend/src/main/java/com/smartinvest/backend/controller/StockController.java"]
+    status: "complete"
+  - chain_id: "TRACE-007"
+    requirement: "REQ-007"
+    plan_phase: "Phase-5"
+    plan_item: "5.1"
+    tasks: ["T024", "T025", "T026", "T027"]
+    files: ["backend/src/main/java/com/smartinvest/backend/service/StockCatalogService.java", "backend/src/main/java/com/smartinvest/backend/controller/StockController.java"]
+    status: "complete"
+  - chain_id: "TRACE-008"
+    requirement: "REQ-008"
+    plan_phase: "Phase-2"
+    plan_item: "2.4"
+    tasks: ["T013", "T016", "T019", "T021", "T023", "T025", "T027", "T028", "T029"]
+    files: ["backend/src/main/java/com/smartinvest/backend/exception/ApiExceptionHandler.java"]
+    status: "complete"
+  - chain_id: "TRACE-009"
+    requirement: "REQ-009"
+    plan_phase: "Phase-3"
+    plan_item: "3.2"
+    tasks: ["T001", "T011", "T019", "T023", "T027"]
+    files: ["backend/src/main/java/com/smartinvest/backend/controller/AuthController.java", "backend/src/main/java/com/smartinvest/backend/controller/WatchlistController.java", "backend/src/main/java/com/smartinvest/backend/controller/StockController.java"]
+    status: "complete"
+  - chain_id: "TRACE-010"
+    requirement: "REQ-010"
+    plan_phase: "Phase-2"
+    plan_item: "2.2"
+    tasks: ["T002", "T003", "T008", "T009", "T017", "T018", "T026", "T028", "T029"]
+    files: ["backend/src/main/resources/db/migration/V1__create_auth_stock_watchlist_tables.sql", "backend/src/main/java/com/smartinvest/backend/repository/"]
+    status: "complete"
+  - chain_id: "TRACE-011"
+    requirement: "REQ-011"
+    plan_phase: "Phase-2"
+    plan_item: "2.4"
+    tasks: ["T012", "T014", "T015", "T017", "T018", "T022", "T023", "T028", "T029"]
+    files: ["backend/src/main/java/com/smartinvest/backend/security/JwtAuthenticationFilter.java", "backend/src/main/java/com/smartinvest/backend/service/WatchlistService.java"]
+    status: "complete"
+  - chain_id: "TRACE-012"
+    requirement: "REQ-012"
+    plan_phase: "Phase-2"
+    plan_item: "2.1"
+    tasks: ["T001", "T004", "T007", "T014", "T015", "T016", "T020", "T021", "T025", "T028", "T029"]
+    files: ["backend/src/test/java/com/smartinvest/backend/"]
+    status: "complete"
+  - chain_id: "TRACE-013"
+    requirement: "REQ-013"
+    plan_phase: "Phase-2"
+    plan_item: "2.2"
+    tasks: ["T002", "T008", "T009", "T010", "T011"]
+    files: ["backend/src/main/java/com/smartinvest/backend/service/AuthService.java", "backend/src/main/java/com/smartinvest/backend/entity/User.java"]
+    status: "complete"
+  - chain_id: "TRACE-014"
+    requirement: "REQ-014"
+    plan_phase: "Phase-2"
+    plan_item: "2.3"
+    tasks: ["T001", "T002", "T005", "T006", "T007", "T010", "T011", "T012"]
+    files: ["backend/src/main/java/com/smartinvest/backend/security/JwtService.java", "backend/src/main/java/com/smartinvest/backend/config/SecurityConfig.java"]
+    status: "complete"
+  - chain_id: "TRACE-015"
+    requirement: "REQ-015"
+    plan_phase: "Phase-2"
+    plan_item: "2.2"
+    tasks: ["T002", "T008", "T009", "T010", "T011", "T012", "T013"]
+    files: ["backend/src/main/java/com/smartinvest/backend/entity/RevokedToken.java", "backend/src/main/java/com/smartinvest/backend/service/AuthService.java"]
+    status: "complete"
+  - chain_id: "TRACE-016"
+    requirement: "REQ-016"
+    plan_phase: "Phase-2"
+    plan_item: "2.1"
+    tasks: ["T001", "T004", "T005", "T006", "T007", "T028", "T029"]
+    files: ["backend/src/test/java/com/smartinvest/backend/"]
+    status: "complete"
+
+validation:
+  passed: true
+  errors: []
+  warnings:
+    - "The initial mvn clean verify could not remove a locked backend/target directory; a subsequent mvn verify passed."
+    - "The stock catalog requires operationally supplied active-stock rows; no production market-data provider or seed catalog was in scope."
+  blocking_issues: []

@@ -1,45 +1,65 @@
 services:
-
   mysql:
-
     image: mysql:8.4
-
-    container_name: smartinvest-mysql
-
     environment:
-      MYSQL_DATABASE: smart_invest_ai
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_USER: smartinvest
-      MYSQL_PASSWORD: smartinvest123
-
+      MYSQL_DATABASE: ${DB_NAME:?Set DB_NAME}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Set MYSQL_ROOT_PASSWORD}
     ports:
-      - "3306:3306"
-
+      - "127.0.0.1:${MYSQL_PORT:-3306}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$$MYSQL_ROOT_PASSWORD"]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
+      start_period: 30s
 
   backend:
-
     build:
       context: ./backend
-
-    container_name: smartinvest-backend
-
-    ports:
-      - "8080:8080"
-
+      dockerfile: Dockerfile
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/smart_invest_ai
-      SPRING_DATASOURCE_USERNAME: smartinvest
-      SPRING_DATASOURCE_PASSWORD: smartinvest123
-
-      JWT_SECRET: dev-secret-key
-      JWT_ISSUER: smart-invest-ai
-      JWT_AUDIENCE: smart-invest-client
-
+      DB_URL: jdbc:mysql://mysql:3306/${DB_NAME:?Set DB_NAME}
+      DB_USERNAME: ${DB_USERNAME:?Set DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET to a base64-encoded key of at least 256 bits}
+      JWT_ISSUER: ${JWT_ISSUER:?Set JWT_ISSUER}
+      JWT_AUDIENCE: ${JWT_AUDIENCE:?Set JWT_AUDIENCE}
+      JWT_EXPIRATION_MINUTES: ${JWT_EXPIRATION_MINUTES:-15}
+      TWELVE_DATA_API_KEY: ${TWELVE_DATA_API_KEY:-}
+      TWELVE_DATA_API_BASE_URL: ${TWELVE_DATA_API_BASE_URL:-https://api.twelvedata.com}
+      SERVER_PORT: 8080
+    ports:
+      - "127.0.0.1:${SERVER_PORT:-8080}:8080"
     depends_on:
       mysql:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "http://localhost:8080/actuator/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    environment:
+      SMARTINVEST_API_ORIGIN: ${SMARTINVEST_API_ORIGIN:-}
+      API_PROXY_TARGET: http://backend:8080
+    ports:
+      - "127.0.0.1:${FRONTEND_PORT:-4173}:8080"
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://127.0.0.1:8080/healthz"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  mysql_data:

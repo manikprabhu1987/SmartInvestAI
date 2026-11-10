@@ -1,0 +1,258 @@
+# Spec-to-Plan Traceability Checkpoint
+metadata:
+  generated: "2026-11-10"
+  source_spec: "specs/003-react-frontend/spec.md"
+  target_plan: "specs/003-react-frontend/plan.md"
+
+summary:
+  total_requirements: 18
+  covered_requirements: 18
+  missing_requirements: 0
+  coverage_percentage: 100.0
+
+requirements:
+  - req_id: "REQ-001"
+    req_description: "Provide registration page and submit the documented request"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-3"
+      phase_name: "User Story 1 - Register and Access an Account"
+      items:
+        - item_id: "3.1"
+          description: "Implement registration and login forms"
+    notes: ""
+  - req_id: "REQ-002"
+    req_description: "Provide login page and submit the documented request"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-3"
+      phase_name: "User Story 1 - Register and Access an Account"
+      items:
+        - item_id: "3.1"
+          description: "Implement registration and login forms"
+        - item_id: "3.2"
+          description: "Implement browser-session authentication and logout"
+    notes: ""
+  - req_id: "REQ-003"
+    req_description: "Keep JWT access token in the current browser session only"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-3"
+      phase_name: "User Story 1 - Register and Access an Account"
+      items:
+        - item_id: "3.2"
+          description: "Implement browser-session authentication and logout"
+    notes: ""
+  - req_id: "REQ-004"
+    req_description: "Restrict bearer authorization headers to protected backend calls"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-1/Phase-2"
+      phase_name: "Setup and Foundational API Infrastructure"
+      items:
+        - item_id: "1.2"
+          description: "Add runtime API-origin configuration and shared API contracts"
+        - item_id: "2.1"
+          description: "Implement the HTTP client and request behavior"
+    notes: ""
+  - req_id: "REQ-005"
+    req_description: "Revoke JWT on logout and clear local authentication state"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-3"
+      phase_name: "User Story 1 - Register and Access an Account"
+      items:
+        - item_id: "3.2"
+          description: "Implement browser-session authentication and logout"
+    notes: ""
+  - req_id: "REQ-006"
+    req_description: "Clear invalid session and return to unauthenticated route on 401"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-2/Phase-3"
+      phase_name: "Foundational API Infrastructure and Authentication"
+      items:
+        - item_id: "2.1"
+          description: "Implement the HTTP client and request behavior"
+        - item_id: "3.2"
+          description: "Implement browser-session authentication and logout"
+    notes: ""
+  - req_id: "REQ-007"
+    req_description: "Protect application routes and provide authenticated navigation"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-2/Phase-3"
+      phase_name: "Foundational API Infrastructure and Authentication"
+      items:
+        - item_id: "2.2"
+          description: "Establish accessible application shell and route boundaries"
+        - item_id: "3.2"
+          description: "Implement browser-session authentication and logout"
+    notes: ""
+  - req_id: "REQ-008"
+    req_description: "Display the user's watchlist and an empty state"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-4"
+      phase_name: "User Story 2 - Manage a Personal Watchlist"
+      items:
+        - item_id: "4.1"
+          description: "Implement watchlist data access and view state"
+        - item_id: "4.2"
+          description: "Build watchlist screens and add/remove interactions"
+    notes: ""
+  - req_id: "REQ-009"
+    req_description: "Add stocks only after backend confirms the operation"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-4/Phase-5"
+      phase_name: "Watchlist and Stock Search"
+      items:
+        - item_id: "4.1"
+          description: "Implement watchlist data access and view state"
+        - item_id: "4.2"
+          description: "Build watchlist screens and add/remove interactions"
+        - item_id: "5.2"
+          description: "Build search results and add-from-search experience"
+    notes: ""
+  - req_id: "REQ-010"
+    req_description: "Remove watchlist stocks only after backend confirmation"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-4"
+      phase_name: "User Story 2 - Manage a Personal Watchlist"
+      items:
+        - item_id: "4.1"
+          description: "Implement watchlist data access and view state"
+        - item_id: "4.2"
+          description: "Build watchlist screens and add/remove interactions"
+    notes: ""
+  - req_id: "REQ-011"
+    req_description: "Search stocks by symbol or company name"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-5"
+      phase_name: "User Story 3 - Search and Select Stocks"
+      items:
+        - item_id: "5.1"
+          description: "Implement stock search requests and pagination state"
+        - item_id: "5.2"
+          description: "Build search results and add-from-search experience"
+    notes: ""
+  - req_id: "REQ-012"
+    req_description: "Support paginated stock-search results"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-5"
+      phase_name: "User Story 3 - Search and Select Stocks"
+      items:
+        - item_id: "5.1"
+          description: "Implement stock search requests and pagination state"
+        - item_id: "5.2"
+          description: "Build search results and add-from-search experience"
+    notes: ""
+  - req_id: "REQ-013"
+    req_description: "Display actionable, non-sensitive form and API errors"
+    priority: "P1"
+    plan_mapping:
+      phase: "Multiple"
+      phase_name: "API, Authentication, Watchlist, and Search"
+      items:
+        - item_id: "1.2"
+          description: "Define backend-compatible response and problem types"
+        - item_id: "2.1"
+          description: "Implement centralized HTTP error handling"
+        - item_id: "3.1"
+          description: "Implement registration and login errors"
+        - item_id: "4.1"
+          description: "Implement watchlist error states"
+        - item_id: "5.1"
+          description: "Implement stock-search error states"
+    notes: ""
+  - req_id: "REQ-014"
+    req_description: "Provide responsive views across phone, tablet, and desktop"
+    priority: "P2"
+    plan_mapping:
+      phase: "Multiple"
+      phase_name: "Setup, Watchlist, Search, and Responsive UI"
+      items:
+        - item_id: "1.1"
+          description: "Align frontend scaffold and quality scripts"
+        - item_id: "2.2"
+          description: "Establish application shell and route boundaries"
+        - item_id: "4.2"
+          description: "Build responsive watchlist screens"
+        - item_id: "5.2"
+          description: "Build responsive search experience"
+        - item_id: "6.2"
+          description: "Complete responsive and accessible presentation"
+    notes: ""
+  - req_id: "REQ-015"
+    req_description: "Provide user-selectable light and dark themes"
+    priority: "P2"
+    plan_mapping:
+      phase: "Phase-6"
+      phase_name: "User Story 4 - Use the App Across Devices and Themes"
+      items:
+        - item_id: "6.1"
+          description: "Implement theme selection and persistence"
+        - item_id: "6.2"
+          description: "Complete responsive and accessible presentation"
+    notes: ""
+  - req_id: "REQ-016"
+    req_description: "Persist theme preference and use device preference by default"
+    priority: "P2"
+    plan_mapping:
+      phase: "Phase-6"
+      phase_name: "User Story 4 - Use the App Across Devices and Themes"
+      items:
+        - item_id: "6.1"
+          description: "Implement theme selection and persistence"
+    notes: ""
+  - req_id: "REQ-017"
+    req_description: "Test authentication, routes, API, watchlist, search, errors, and theme"
+    priority: "P1"
+    plan_mapping:
+      phase: "Multiple"
+      phase_name: "Test foundations and all user stories"
+      items:
+        - item_id: "1.1"
+          description: "Add frontend test dependencies and scripts"
+        - item_id: "3.1"
+          description: "Test registration and login forms"
+        - item_id: "3.2"
+          description: "Test authentication and route protection"
+        - item_id: "4.1"
+          description: "Test watchlist behavior"
+        - item_id: "5.1"
+          description: "Test search and pagination"
+        - item_id: "6.1"
+          description: "Test theme behavior"
+        - item_id: "7.2"
+          description: "Run browser and final verification"
+    notes: ""
+  - req_id: "REQ-018"
+    req_description: "Build and run Docker service with runtime API-origin configuration"
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-1/Phase-7"
+      phase_name: "Setup and Cross-Cutting Docker Verification"
+      items:
+        - item_id: "1.1"
+          description: "Align frontend scaffold and build scripts"
+        - item_id: "1.2"
+          description: "Define runtime API-origin configuration"
+        - item_id: "7.1"
+          description: "Add runtime-configurable non-root Docker delivery"
+        - item_id: "7.2"
+          description: "Verify browser journeys and Docker runtime"
+    notes: ""
+
+missing_requirements: []
+orphan_plan_items: []
+
+validation:
+  passed: true
+  errors: []
+  warnings:
+    - "The architecture inventory describes the committed starter baseline; implementation should confirm the current frontend manifest and entry points before editing."

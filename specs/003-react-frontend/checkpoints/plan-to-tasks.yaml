@@ -1,0 +1,210 @@
+# Plan-to-Tasks Traceability Checkpoint
+metadata:
+  generated: "2026-11-10"
+  source_plan: "specs/003-react-frontend/plan.md"
+  target_tasks: "specs/003-react-frontend/plan.md#task-breakdown"
+
+summary:
+  total_plan_items: 14
+  covered_plan_items: 14
+  missing_plan_items: 0
+  coverage_percentage: 100.0
+  total_tasks_generated: 31
+  orphan_tasks: 0
+
+phases:
+  - phase_id: "Phase-1"
+    phase_name: "Setup"
+    items:
+      - item_id: "1.1"
+        description: "Align the frontend scaffold and quality scripts"
+        tasks:
+          - task_id: "T001"
+            description: "Align frontend dependencies and canonical scripts"
+          - task_id: "T002"
+            description: "Add Vitest/Testing Library setup and a render smoke test"
+      - item_id: "1.2"
+        description: "Add runtime API-origin configuration and shared API contracts"
+        tasks:
+          - task_id: "T003"
+            description: "Define typed backend request/response/problem contracts"
+          - task_id: "T004"
+            description: "Implement and test runtime API-origin parsing"
+  - phase_id: "Phase-2"
+    phase_name: "Foundational API and Session Infrastructure"
+    items:
+      - item_id: "2.1"
+        description: "Implement the HTTP client and request behavior"
+        tasks:
+          - task_id: "T005"
+            description: "Test API URL composition, bearer scoping, errors, and 401 handling"
+          - task_id: "T006"
+            description: "Implement Axios client and typed endpoint methods"
+      - item_id: "2.2"
+        description: "Establish accessible application shell and route boundaries"
+        tasks:
+          - task_id: "T007"
+            description: "Create shared app shell and semantic navigation"
+          - task_id: "T008"
+            description: "Test protected route behavior"
+          - task_id: "T013"
+            description: "Wire auth routes, application shell, and protected navigation"
+  - phase_id: "Phase-3"
+    phase_name: "User Story 1 - Register and Access an Account"
+    items:
+      - item_id: "3.1"
+        description: "Implement registration and login forms"
+        tasks:
+          - task_id: "T009"
+            description: "Test registration form behavior"
+          - task_id: "T010"
+            description: "Implement registration page and confirmation"
+          - task_id: "T013"
+            description: "Implement login page and route wiring"
+          - task_id: "T014"
+            description: "Test auth browser journey and invalid credentials"
+      - item_id: "3.2"
+        description: "Implement browser-session authentication and logout"
+        tasks:
+          - task_id: "T011"
+            description: "Test token storage, expiry, logout, and cleanup"
+          - task_id: "T012"
+            description: "Implement session storage and auth provider"
+          - task_id: "T013"
+            description: "Wire authenticated and unauthenticated routes"
+  - phase_id: "Phase-4"
+    phase_name: "User Story 2 - Manage a Personal Watchlist"
+    items:
+      - item_id: "4.1"
+        description: "Implement watchlist data access and view state"
+        tasks:
+          - task_id: "T015"
+            description: "Test watchlist state and confirmed mutations"
+          - task_id: "T016"
+            description: "Implement typed watchlist data access and state"
+      - item_id: "4.2"
+        description: "Build watchlist screens and add/remove interactions"
+        tasks:
+          - task_id: "T017"
+            description: "Build watchlist and add-stock form"
+          - task_id: "T018"
+            description: "Implement and test confirmed removal UX"
+          - task_id: "T019"
+            description: "Exercise watchlist flow in Playwright"
+  - phase_id: "Phase-5"
+    phase_name: "User Story 3 - Search and Select Stocks"
+    items:
+      - item_id: "5.1"
+        description: "Implement stock search requests and pagination state"
+        tasks:
+          - task_id: "T020"
+            description: "Test search validation, pagination, stale responses, and errors"
+          - task_id: "T021"
+            description: "Implement typed search and pagination state"
+      - item_id: "5.2"
+        description: "Build search results and add-from-search experience"
+        tasks:
+          - task_id: "T022"
+            description: "Build search UI and pagination controls"
+          - task_id: "T023"
+            description: "Connect add-from-search and test interactions"
+          - task_id: "T024"
+            description: "Exercise search and add flows in Playwright"
+  - phase_id: "Phase-6"
+    phase_name: "User Story 4 - Responsive Layout and Themes"
+    items:
+      - item_id: "6.1"
+        description: "Implement theme selection and persistence"
+        tasks:
+          - task_id: "T025"
+            description: "Test saved theme, device preference, and persistence"
+          - task_id: "T026"
+            description: "Implement Material UI theme provider and preference"
+      - item_id: "6.2"
+        description: "Complete responsive and accessible presentation"
+        tasks:
+          - task_id: "T027"
+            description: "Implement responsive accessible UI and component checks"
+          - task_id: "T028"
+            description: "Verify theme and viewport behavior in Playwright"
+  - phase_id: "Phase-7"
+    phase_name: "Cross-Cutting Docker and Runtime Verification"
+    items:
+      - item_id: "7.1"
+        description: "Add runtime-configurable non-root Docker delivery"
+        tasks:
+          - task_id: "T029"
+            description: "Add Docker build and runtime API configuration"
+          - task_id: "T030"
+            description: "Verify health route, non-root serving, and SPA fallback"
+      - item_id: "7.2"
+        description: "Verify browser journeys, responsive behavior, and delivery"
+        tasks:
+          - task_id: "T031"
+            description: "Run full tests, build, Playwright, and Docker verification"
+
+missing_plan_items: []
+orphan_tasks: []
+
+upstream_trace:
+  - plan_item: "1.1"
+    source_requirements: ["REQ-014", "REQ-017", "REQ-018"]
+    tasks: ["T001", "T002"]
+    full_trace: "REQ-014/017/018 -> Phase-1.1 -> T001/T002 -> frontend scaffold and tests"
+  - plan_item: "1.2"
+    source_requirements: ["REQ-004", "REQ-013", "REQ-018"]
+    tasks: ["T003", "T004"]
+    full_trace: "REQ-004/013/018 -> Phase-1.2 -> T003/T004 -> API types and runtime config"
+  - plan_item: "2.1"
+    source_requirements: ["REQ-004", "REQ-006", "REQ-013"]
+    tasks: ["T005", "T006"]
+    full_trace: "REQ-004/006/013 -> Phase-2.1 -> T005/T006 -> shared HTTP boundary"
+  - plan_item: "2.2"
+    source_requirements: ["REQ-007", "REQ-014"]
+    tasks: ["T007", "T008", "T013"]
+    full_trace: "REQ-007/014 -> Phase-2.2 -> T007/T008/T013 -> app shell and protected routes"
+  - plan_item: "3.1"
+    source_requirements: ["REQ-001", "REQ-002", "REQ-013", "REQ-017"]
+    tasks: ["T009", "T010", "T013", "T014"]
+    full_trace: "REQ-001/002/013/017 -> Phase-3.1 -> form and browser tests -> auth pages"
+  - plan_item: "3.2"
+    source_requirements: ["REQ-003", "REQ-005", "REQ-006", "REQ-007", "REQ-017"]
+    tasks: ["T011", "T012", "T013", "T014"]
+    full_trace: "REQ-003/005/006/007/017 -> Phase-3.2 -> T011-T014 -> session and routes"
+  - plan_item: "4.1"
+    source_requirements: ["REQ-008", "REQ-009", "REQ-010", "REQ-013", "REQ-017"]
+    tasks: ["T015", "T016"]
+    full_trace: "REQ-008/009/010/013/017 -> Phase-4.1 -> T015/T016 -> watchlist data flow"
+  - plan_item: "4.2"
+    source_requirements: ["REQ-008", "REQ-009", "REQ-010", "REQ-013", "REQ-014", "REQ-017"]
+    tasks: ["T017", "T018", "T019"]
+    full_trace: "REQ-008/009/010/013/014/017 -> Phase-4.2 -> T017-T019 -> watchlist screens"
+  - plan_item: "5.1"
+    source_requirements: ["REQ-011", "REQ-012", "REQ-013", "REQ-017"]
+    tasks: ["T020", "T021"]
+    full_trace: "REQ-011/012/013/017 -> Phase-5.1 -> T020/T021 -> search state"
+  - plan_item: "5.2"
+    source_requirements: ["REQ-009", "REQ-011", "REQ-012", "REQ-013", "REQ-014", "REQ-017"]
+    tasks: ["T022", "T023", "T024"]
+    full_trace: "REQ-009/011/012/013/014/017 -> Phase-5.2 -> T022-T024 -> search UI"
+  - plan_item: "6.1"
+    source_requirements: ["REQ-015", "REQ-016", "REQ-017"]
+    tasks: ["T025", "T026"]
+    full_trace: "REQ-015/016/017 -> Phase-6.1 -> T025/T026 -> theme preference"
+  - plan_item: "6.2"
+    source_requirements: ["REQ-014", "REQ-015", "REQ-017"]
+    tasks: ["T027", "T028"]
+    full_trace: "REQ-014/015/017 -> Phase-6.2 -> T027/T028 -> responsive accessible views"
+  - plan_item: "7.1"
+    source_requirements: ["REQ-018"]
+    tasks: ["T029", "T030"]
+    full_trace: "REQ-018 -> Phase-7.1 -> T029/T030 -> Docker runtime"
+  - plan_item: "7.2"
+    source_requirements: ["REQ-001", "REQ-002", "REQ-003", "REQ-004", "REQ-005", "REQ-006", "REQ-007", "REQ-008", "REQ-009", "REQ-010", "REQ-011", "REQ-012", "REQ-013", "REQ-014", "REQ-015", "REQ-016", "REQ-017", "REQ-018"]
+    tasks: ["T031"]
+    full_trace: "REQ-001..REQ-018 -> Phase-7.2 -> T031 -> full integration and delivery verification"
+
+validation:
+  passed: true
+  errors: []
+  warnings: []

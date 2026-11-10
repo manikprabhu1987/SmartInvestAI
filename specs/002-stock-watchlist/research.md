@@ -34,12 +34,11 @@
 
 ### Backend Framework Baseline
 
-- **Decision**: Align the backend build to Java 21 and a supported Spring Boot
-  3.x release before feature implementation.
-- **Rationale**: The project constitution specifies Spring Boot 3.x, while the
-  tracked Maven parent currently declares Spring Boot 4.2.0-SNAPSHOT.
-- **Alternatives considered**: Retaining the snapshot was rejected because it
-  conflicts with the ratified project technology stack.
+- **Decision**: Retain the existing Java 21 and Spring Boot 3.5.6 baseline.
+- **Rationale**: The inspected tracked Maven parent already matches the
+  constitution's Spring Boot 3.x requirement.
+- **Alternatives considered**: A framework-version change is unnecessary for
+  this feature and was not introduced.
 
 ### Test Infrastructure
 
@@ -48,11 +47,12 @@
   only as an explicit local fallback when Docker is unavailable.
 - **Rationale**: This preserves MySQL-specific persistence coverage while
   retaining a documented fallback for environments where Docker is unavailable.
-- **Environment evidence**: Java 21.0.13, Maven 3.9.16, Node.js 26.13.0, and
-  Docker Desktop are available. A current `docker info` check confirms the
-  Docker Desktop Linux engine is running. The current working tree has deleted
-  the tracked backend build and test files, so the existing Maven test
-  baseline could not be run without restoring user-deleted files.
+- **Environment evidence**: Java 21.0.13, Maven 3.10.0, Node.js 26.13.0, and
+  Docker Desktop are available. `docker info` confirms the Docker Desktop
+  Linux engine is running. The pre-feature Maven baseline completed
+  successfully with zero tests. Testcontainers was pinned to 1.21.4 after the
+  prior version attempted to use an obsolete Docker API; the MySQL-backed suite
+  then ran successfully.
 - **Browser testing**: Not applicable to this REST-only feature scope; no
   frontend user journey or UI change is specified.
 

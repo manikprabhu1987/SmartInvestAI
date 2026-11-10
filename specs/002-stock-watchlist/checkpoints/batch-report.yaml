@@ -1,0 +1,367 @@
+batch_id: "B01"
+completed_tasks: ["T001", "T002", "T003", "T004", "T005", "T006", "T007", "T008", "T009", "T010", "T011", "T012", "T013", "T014", "T015", "T016", "T017", "T018", "T019", "T020", "T021", "T022", "T023", "T024", "T025", "T026", "T027", "T028", "T029"]
+blocked_tasks: []
+
+files_changed:
+  T001:
+    - file: "backend/pom.xml"
+      change_type: "modified"
+      description: "Configured backend dependencies and Docker-compatible Testcontainers."
+  T002:
+    - file: "backend/src/main/resources/application.properties"
+      change_type: "modified"
+      description: "Externalized MySQL and JWT runtime configuration."
+    - file: "backend/src/main/java/com/smartinvest/backend/config/JwtProperties.java"
+      change_type: "modified"
+      description: "Validated JWT configuration."
+  T003:
+    - file: "backend/Dockerfile"
+      change_type: "created"
+      description: "Added multi-stage, non-root backend image."
+    - file: "backend/.dockerignore"
+      change_type: "created"
+      description: "Excluded non-runtime files from the image context."
+    - file: ".gitignore"
+      change_type: "created"
+      description: "Ignored local secrets and build outputs."
+    - file: ".env.example"
+      change_type: "created"
+      description: "Documented required runtime variables."
+    - file: "compose.yaml"
+      change_type: "created"
+      description: "Added backend/MySQL stack and health checks."
+  T004:
+    - file: "backend/src/test/java/com/smartinvest/backend/support/AbstractMysqlIntegrationTest.java"
+      change_type: "created"
+      description: "Added MySQL Testcontainers setup and H2 fallback."
+    - file: "backend/src/test/resources/application-h2-test.properties"
+      change_type: "created"
+      description: "Added fallback datasource properties."
+  T005:
+    - file: "backend/src/test/java/com/smartinvest/backend/service/AuthServiceTest.java"
+      change_type: "created"
+      description: "Added authentication service unit tests."
+  T006:
+    - file: "backend/src/test/java/com/smartinvest/backend/security/JwtServiceTest.java"
+      change_type: "created"
+      description: "Added JWT security/lifecycle tests."
+  T007:
+    - file: "backend/src/test/java/com/smartinvest/backend/controller/AuthApiIntegrationTest.java"
+      change_type: "created"
+      description: "Added authentication API integration tests."
+  T008:
+    - file: "backend/src/main/resources/db/migration/V1__create_auth_stock_watchlist_tables.sql"
+      change_type: "created"
+      description: "Created the authentication, catalog, and watchlist schema."
+  T009:
+    - file: "backend/src/main/java/com/smartinvest/backend/entity/User.java"
+      change_type: "created"
+      description: "Added user entity."
+    - file: "backend/src/main/java/com/smartinvest/backend/entity/RevokedToken.java"
+      change_type: "created"
+      description: "Added revoked-token entity."
+    - file: "backend/src/main/java/com/smartinvest/backend/repository/UserRepository.java"
+      change_type: "created"
+      description: "Added user repository."
+    - file: "backend/src/main/java/com/smartinvest/backend/repository/RevokedTokenRepository.java"
+      change_type: "created"
+      description: "Added token revocation repository."
+  T010:
+    - file: "backend/src/main/java/com/smartinvest/backend/service/AuthService.java"
+      change_type: "created"
+      description: "Added registration, authentication, and logout services."
+    - file: "backend/src/main/java/com/smartinvest/backend/security/JwtService.java"
+      change_type: "created"
+      description: "Added JWT issuance and validation."
+  T011:
+    - file: "backend/src/main/java/com/smartinvest/backend/dto/"
+      change_type: "created"
+      description: "Added auth request and response DTOs."
+    - file: "backend/src/main/java/com/smartinvest/backend/controller/AuthController.java"
+      change_type: "created"
+      description: "Added authentication routes."
+  T012:
+    - file: "backend/src/main/java/com/smartinvest/backend/config/SecurityConfig.java"
+      change_type: "created"
+      description: "Configured stateless JWT security."
+    - file: "backend/src/main/java/com/smartinvest/backend/security/JwtAuthenticationFilter.java"
+      change_type: "created"
+      description: "Derived request identity from verified JWTs."
+  T013:
+    - file: "backend/src/main/java/com/smartinvest/backend/exception/ApiExceptionHandler.java"
+      change_type: "created"
+      description: "Added safe Problem Details exception mapping."
+  T014:
+    - file: "backend/src/test/java/com/smartinvest/backend/service/StockCatalogServiceTest.java"
+      change_type: "created"
+      description: "Added stock catalog service tests."
+  T015:
+    - file: "backend/src/test/java/com/smartinvest/backend/service/WatchlistServiceTest.java"
+      change_type: "created"
+      description: "Added watchlist service tests."
+  T016:
+    - file: "backend/src/test/java/com/smartinvest/backend/controller/WatchlistApiIntegrationTest.java"
+      change_type: "created"
+      description: "Added watchlist add API tests."
+  T017:
+    - file: "backend/src/main/java/com/smartinvest/backend/entity/Stock.java"
+      change_type: "created"
+      description: "Added stock entity."
+    - file: "backend/src/main/java/com/smartinvest/backend/entity/WatchlistEntry.java"
+      change_type: "created"
+      description: "Added watchlist entry entity."
+    - file: "backend/src/main/java/com/smartinvest/backend/repository/StockRepository.java"
+      change_type: "created"
+      description: "Added catalog repository."
+    - file: "backend/src/main/java/com/smartinvest/backend/repository/WatchlistEntryRepository.java"
+      change_type: "created"
+      description: "Added watchlist repository."
+  T018:
+    - file: "backend/src/main/java/com/smartinvest/backend/service/StockCatalogService.java"
+      change_type: "created"
+      description: "Added stock validation and search service."
+    - file: "backend/src/main/java/com/smartinvest/backend/service/WatchlistService.java"
+      change_type: "created"
+      description: "Added owner-scoped watchlist operations."
+  T019:
+    - file: "backend/src/main/java/com/smartinvest/backend/dto/"
+      change_type: "created"
+      description: "Added watchlist request and response DTOs."
+    - file: "backend/src/main/java/com/smartinvest/backend/controller/WatchlistController.java"
+      change_type: "created"
+      description: "Added POST watchlist route."
+  T020:
+    - file: "backend/src/test/java/com/smartinvest/backend/service/WatchlistServiceTest.java"
+      change_type: "modified"
+      description: "Added list/removal service coverage."
+  T021:
+    - file: "backend/src/test/java/com/smartinvest/backend/controller/WatchlistApiIntegrationTest.java"
+      change_type: "modified"
+      description: "Added ownership and list/remove API coverage."
+  T022:
+    - file: "backend/src/main/java/com/smartinvest/backend/repository/WatchlistEntryRepository.java"
+      change_type: "modified"
+      description: "Added owner-scoped listing and deletion."
+    - file: "backend/src/main/java/com/smartinvest/backend/service/WatchlistService.java"
+      change_type: "modified"
+      description: "Added list and remove behavior."
+  T023:
+    - file: "backend/src/main/java/com/smartinvest/backend/controller/WatchlistController.java"
+      change_type: "modified"
+      description: "Added GET and DELETE watchlist routes."
+    - file: "backend/src/main/java/com/smartinvest/backend/dto/RemoveWatchlistStockResponse.java"
+      change_type: "created"
+      description: "Added remove response DTO."
+  T024:
+    - file: "backend/src/test/java/com/smartinvest/backend/service/StockCatalogServiceTest.java"
+      change_type: "modified"
+      description: "Added pagination, validation, and deterministic-order tests."
+  T025:
+    - file: "backend/src/test/java/com/smartinvest/backend/controller/StockSearchApiIntegrationTest.java"
+      change_type: "created"
+      description: "Added catalog search and 1,000-row performance integration tests."
+  T026:
+    - file: "backend/src/main/java/com/smartinvest/backend/repository/StockRepository.java"
+      change_type: "modified"
+      description: "Added paginated active catalog queries."
+    - file: "backend/src/main/java/com/smartinvest/backend/service/StockCatalogService.java"
+      change_type: "modified"
+      description: "Added search validation, pagination bounds, and deterministic ordering."
+  T027:
+    - file: "backend/src/main/java/com/smartinvest/backend/dto/StockSearchPageResponse.java"
+      change_type: "created"
+      description: "Added paginated search response."
+    - file: "backend/src/main/java/com/smartinvest/backend/controller/StockController.java"
+      change_type: "created"
+      description: "Added stock search route."
+  T028:
+    - file: "specs/002-stock-watchlist/plan.md"
+      change_type: "modified"
+      description: "Recorded verification outcomes and clean-phase limitation."
+  T029: []
+
+upstream_artifacts_consumed:
+  T001:
+    - artifact: "specs/002-stock-watchlist/plan.md"
+      used_for: "Java/Spring, dependency, and validation choices."
+    - artifact: "specs/project-constitution.md"
+      used_for: "Project technology and coding constraints."
+  T008:
+    - artifact: "specs/002-stock-watchlist/data-model.md"
+      used_for: "Relational entities, constraints, and ownership model."
+  T011:
+    - artifact: "specs/002-stock-watchlist/contracts/watchlist-api.yaml"
+      used_for: "Authentication route/request/response contracts."
+  T016:
+    - artifact: "specs/002-stock-watchlist/spec.md"
+      used_for: "Add-stock validation and acceptance criteria."
+  T019:
+    - artifact: "specs/002-stock-watchlist/contracts/watchlist-api.yaml"
+      used_for: "Watchlist endpoint paths and response shapes."
+  T025:
+    - artifact: "specs/002-stock-watchlist/spec.md"
+      used_for: "Search, pagination, and 1,000-row performance criteria."
+  T028:
+    - artifact: "specs/002-stock-watchlist/plan.md"
+      used_for: "Required verification strategy and task/requirement mapping."
+
+evidence_mapping:
+  T016:
+    - upstream: "specs/002-stock-watchlist/spec.md#User Story 1"
+      output: "backend/src/main/java/com/smartinvest/backend/controller/WatchlistController.java"
+      evidence: "WatchlistApiIntegrationTest passed as part of the MySQL-backed Maven verify run."
+  T021:
+    - upstream: "specs/002-stock-watchlist/spec.md#User Story 2"
+      output: "backend/src/main/java/com/smartinvest/backend/service/WatchlistService.java"
+      evidence: "Owner-isolation and add/view/remove integration coverage passed."
+  T025:
+    - upstream: "specs/002-stock-watchlist/spec.md#User Story 3"
+      output: "backend/src/main/java/com/smartinvest/backend/controller/StockController.java"
+      evidence: "StockSearchApiIntegrationTest passed, including a 1,000-row catalog case."
+  T028:
+    - upstream: "specs/002-stock-watchlist/plan.md#Testing Strategy"
+      output: "backend/"
+      evidence: "mvn verify: 33 tests, 0 failures, 0 errors, 0 skipped."
+  T029:
+    - upstream: "specs/002-stock-watchlist/plan.md#Step 6.1"
+      output: "backend/Dockerfile and compose.yaml"
+      evidence: "Docker Compose health, auth, protected API, runtime secrets, and non-root execution verified."
+
+traceability:
+  - requirement: "REQ-001"
+    plan_item: "3.1, 3.2"
+    task: "T014, T015, T016, T017, T018, T019"
+    files: ["backend/src/main/java/com/smartinvest/backend/service/WatchlistService.java", "backend/src/main/java/com/smartinvest/backend/controller/WatchlistController.java"]
+    status: "completed"
+  - requirement: "REQ-002"
+    plan_item: "3.1, 3.2, 6.1"
+    task: "T014, T016, T017, T018, T028, T029"
+    files: ["backend/src/main/java/com/smartinvest/backend/service/StockCatalogService.java", "backend/src/main/resources/db/migration/V1__create_auth_stock_watchlist_tables.sql"]
+    status: "completed"
+  - requirement: "REQ-003"
+    plan_item: "2.2, 3.1, 3.2"
+    task: "T008, T015, T016, T017, T018, T019"
+    files: ["backend/src/main/resources/db/migration/V1__create_auth_stock_watchlist_tables.sql", "backend/src/main/java/com/smartinvest/backend/service/WatchlistService.java"]
+    status: "completed"
+  - requirement: "REQ-004"
+    plan_item: "4.1, 4.2"
+    task: "T020, T021, T022, T023"
+    files: ["backend/src/main/java/com/smartinvest/backend/service/WatchlistService.java", "backend/src/main/java/com/smartinvest/backend/controller/WatchlistController.java"]
+    status: "completed"
+  - requirement: "REQ-005"
+    plan_item: "4.1, 4.2"
+    task: "T020, T021, T022, T023"
+    files: ["backend/src/main/java/com/smartinvest/backend/service/WatchlistService.java", "backend/src/main/java/com/smartinvest/backend/controller/WatchlistController.java"]
+    status: "completed"
+  - requirement: "REQ-006"
+    plan_item: "5.1, 5.2, 6.1"
+    task: "T024, T025, T026, T027, T028, T029"
+    files: ["backend/src/main/java/com/smartinvest/backend/service/StockCatalogService.java", "backend/src/main/java/com/smartinvest/backend/controller/StockController.java"]
+    status: "completed"
+  - requirement: "REQ-007"
+    plan_item: "5.1, 5.2"
+    task: "T024, T025, T026, T027"
+    files: ["backend/src/main/java/com/smartinvest/backend/service/StockCatalogService.java", "backend/src/main/java/com/smartinvest/backend/controller/StockController.java"]
+    status: "completed"
+  - requirement: "REQ-008"
+    plan_item: "2.4, 3.2, 4.2, 5.2, 6.1"
+    task: "T013, T016, T019, T021, T023, T025, T027, T028, T029"
+    files: ["backend/src/main/java/com/smartinvest/backend/exception/ApiExceptionHandler.java"]
+    status: "completed"
+  - requirement: "REQ-009"
+    plan_item: "1.1, 3.2, 4.2, 5.2"
+    task: "T001, T011, T019, T023, T027"
+    files: ["backend/src/main/java/com/smartinvest/backend/controller/AuthController.java", "backend/src/main/java/com/smartinvest/backend/controller/WatchlistController.java", "backend/src/main/java/com/smartinvest/backend/controller/StockController.java"]
+    status: "completed"
+  - requirement: "REQ-010"
+    plan_item: "1.2, 1.3, 2.2, 3.1, 6.1"
+    task: "T002, T003, T008, T009, T017, T018, T026, T028, T029"
+    files: ["backend/src/main/resources/db/migration/V1__create_auth_stock_watchlist_tables.sql", "backend/src/main/java/com/smartinvest/backend/repository/"]
+    status: "completed"
+  - requirement: "REQ-011"
+    plan_item: "2.3, 2.4, 3.1, 4.1, 4.2"
+    task: "T012, T014, T015, T017, T018, T022, T023, T028, T029"
+    files: ["backend/src/main/java/com/smartinvest/backend/security/JwtAuthenticationFilter.java", "backend/src/main/java/com/smartinvest/backend/service/WatchlistService.java"]
+    status: "completed"
+  - requirement: "REQ-012"
+    plan_item: "1.1, 2.1, 3.2, 4.2, 5.2, 6.1"
+    task: "T001, T004, T007, T014, T015, T016, T020, T021, T025, T028, T029"
+    files: ["backend/src/test/java/com/smartinvest/backend/"]
+    status: "completed"
+  - requirement: "REQ-013"
+    plan_item: "2.2, 2.3"
+    task: "T002, T008, T009, T010, T011"
+    files: ["backend/src/main/java/com/smartinvest/backend/service/AuthService.java", "backend/src/main/java/com/smartinvest/backend/entity/User.java"]
+    status: "completed"
+  - requirement: "REQ-014"
+    plan_item: "1.1, 2.3, 2.4"
+    task: "T001, T002, T005, T006, T007, T010, T011, T012"
+    files: ["backend/src/main/java/com/smartinvest/backend/security/JwtService.java", "backend/src/main/java/com/smartinvest/backend/config/SecurityConfig.java"]
+    status: "completed"
+  - requirement: "REQ-015"
+    plan_item: "1.2, 2.2, 2.3, 2.4"
+    task: "T002, T008, T009, T010, T011, T012, T013"
+    files: ["backend/src/main/java/com/smartinvest/backend/entity/RevokedToken.java", "backend/src/main/java/com/smartinvest/backend/service/AuthService.java"]
+    status: "completed"
+  - requirement: "REQ-016"
+    plan_item: "1.1, 2.1, 2.3, 6.1"
+    task: "T001, T004, T005, T006, T007, T028, T029"
+    files: ["backend/src/test/java/com/smartinvest/backend/"]
+    status: "completed"
+
+endpoint_probes:
+  - method: "GET"
+    path: "/actuator/health"
+    status: 200
+    result: "PASS"
+    evidence: "Docker Compose health check."
+  - method: "POST"
+    path: "/api/v1/auth/register"
+    status: 201
+    result: "PASS"
+    evidence: "Docker Compose smoke flow and MySQL API integration test."
+  - method: "POST"
+    path: "/api/v1/auth/login"
+    status: 200
+    result: "PASS"
+    evidence: "Docker Compose smoke flow and MySQL API integration test."
+  - method: "POST"
+    path: "/api/v1/auth/logout"
+    status: 204
+    result: "PASS"
+    evidence: "MySQL API integration test verified token revocation."
+  - method: "POST"
+    path: "/api/v1/watchlist"
+    status: 201
+    result: "PASS"
+    evidence: "MySQL API integration test."
+  - method: "GET"
+    path: "/api/v1/watchlist"
+    status: 200
+    result: "PASS"
+    evidence: "Docker Compose smoke flow and MySQL API integration test."
+  - method: "DELETE"
+    path: "/api/v1/watchlist/{symbol}"
+    status: 200
+    result: "PASS"
+    evidence: "MySQL API integration test."
+  - method: "GET"
+    path: "/api/v1/stocks/search?q=AAPL"
+    status: 200
+    result: "PASS"
+    evidence: "Docker Compose smoke flow and MySQL API integration test."
+
+protocol_violation: false
+errors: []
+warnings:
+  - severity: LOW
+    message: "mvn clean verify could not remove a locked backend/target directory; the follow-up mvn verify passed with all 33 tests."
+  - severity: LOW
+    message: "The production stock catalog needs operationally supplied rows; a market-data ingestion provider and seed catalog were outside the approved scope."
+test_results:
+  T028:
+    command: "mvn verify (from backend)"
+    passed: 33
+    failed: 0
+    skipped: 0
+    failures: []

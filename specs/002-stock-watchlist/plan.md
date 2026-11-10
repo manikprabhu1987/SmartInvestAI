@@ -28,9 +28,9 @@ catalog complete within two seconds under normal service conditions
 **Constraints**: JWT identity is the sole source of watchlist ownership;
 duplicate prevention must be enforced by a database unique constraint; stock
 symbols are resolved from preloaded active MySQL catalog rows; no external
-market-data provider or frontend UI is in scope. The tracked Maven baseline
-declares Spring Boot 4.2.0-SNAPSHOT, which conflicts with the constitution's
-Spring Boot 3.x target and must be reconciled in setup.
+market-data provider or frontend UI is in scope. The existing backend uses
+Java 21 and Spring Boot 3.5.6; this feature adds the missing authentication,
+catalog, and watchlist layers.
 
 ## Constitution Check
 
@@ -44,10 +44,10 @@ Spring Boot 3.x target and must be reconciled in setup.
 | IV. Trustworthy Market Data and Analysis | PASS | Stock existence/search use an explicit MySQL catalog; inactive/missing symbols are not silently accepted. No prices or recommendations are introduced. |
 | V. Operable, Containerized Delivery | PASS | Backend/MySQL Docker configuration is included with runtime secrets, health checks, and visible startup failures. |
 
-**Baseline constraint**: The current tracked POM declares a Spring Boot 4.2.0
-snapshot despite the constitution's 3.x target. Setup aligns the build to a
-supported Spring Boot 3.x release rather than silently carrying the mismatch
-into the feature.
+**Baseline assessment**: The backend's Java 21 and Spring Boot 3.5.6 baseline
+already matches the constitution. Runtime properties contained hard-coded
+database/JWT credentials; setup replaces them with required environment-based
+configuration.
 
 ## Applied Guidelines
 
@@ -69,11 +69,10 @@ provide a containerized local runtime.
 
 - **Requirements**: REQ-009, REQ-012, REQ-014, REQ-016
 - **Design inputs**: `tech-stack.md`, `spec.md`, project constitution
-- **Description**: Align the Maven parent and starters with Java 21 and a
-  supported Spring Boot 3.x release. Add or configure the JWT, Flyway,
-  Testcontainers MySQL, and H2 test-fallback dependencies required by later
-  phases. Keep JUnit 5/Mockito tests reachable through the canonical Maven
-  command.
+- **Description**: Keep the existing Java 21/Spring Boot 3.5.6 baseline and
+  configure compatible JWT, Flyway, MySQL Testcontainers, and H2 fallback
+  dependencies. Keep JUnit 5/Mockito tests reachable through the canonical
+  Maven command.
 
 #### Step 1.2: Configure persistent runtime settings
 
@@ -89,10 +88,10 @@ provide a containerized local runtime.
 
 - **Requirements**: REQ-010
 - **Design inputs**: `spec.md`, project constitution
-- **Description**: Add a backend Dockerfile and root Compose configuration for
-  the API and MySQL. Require credentials and signing keys from environment
-  configuration, add database/API health checks, and do not embed stock data
-  or secrets in images.
+- **Description**: Add a multi-stage non-root backend Dockerfile, `.dockerignore`,
+  root Compose configuration, and `.env.example`. Require credentials and
+  signing keys from environment configuration, add database/API health checks,
+  and do not embed stock data or secrets in images.
 
 ### Phase 2: Foundational Authentication and Persistence
 
@@ -292,9 +291,9 @@ specs/002-stock-watchlist/
   scope.
 - **knownGaps**: H2 does not prove MySQL collation, constraint, migration, or
   pagination behavior. MySQL Testcontainers remains required in CI/release
-  runs. Docker Desktop is installed and its engine is currently running. The
-  existing baseline test command could not run because its tracked POM and test
-  sources are deleted in the current working tree.
+  runs. Docker Desktop is installed and its engine is running; the full suite
+  passed against MySQL Testcontainers. The pre-feature `mvn test` baseline
+  completed successfully with zero tests.
 - **Test data strategy**: Seed test-owned users and catalog rows in isolated
   test setup; use unique email addresses per test; generate at least 1,000
   deterministic synthetic stock rows for search performance checks; clean up
@@ -327,59 +326,57 @@ specs/002-stock-watchlist/
 - **Test execution rule**: Every implementation task runs the relevant backend
   JUnit tests and reports pass/fail/skip counts. A failing or unrun required
   test blocks task completion.
-- **Legacy Test Assets**: One JUnit Spring context-load test,
-  `BackendApplicationTests.contextLoads`, was discovered in the committed
-  baseline. No legacy E2E suite was found. The file is deleted in the current
-  working tree, so it was not run and must not be restored implicitly.
+- **Legacy Test Assets**: No legacy integration or E2E test files were present
+  in the working tree. The pre-feature Maven baseline discovered zero tests.
 
 ## Task Breakdown
 
 ### Phase 1: Setup
 
-- [ ] T001 [Plan:1.1] Align `backend/pom.xml` with Java 21 and a supported Spring Boot 3.x release; configure compatible web, security/JWT, JPA, validation, MySQL, Flyway, JUnit 5, Mockito, Testcontainers MySQL, and H2 test dependencies.
-- [ ] T002 [P] [Plan:1.2] Configure `backend/src/main/resources/application.properties` to require runtime MySQL credentials and JWT signing, issuer, and audience configuration; enable Flyway and schema validation without embedded secrets.
-- [ ] T003 [Plan:1.3] Add a multi-stage non-root `backend/Dockerfile`, `backend/.dockerignore`, and root `compose.yaml` for the backend and MySQL, with required environment variables, health checks, and no embedded secrets.
+- [x] T001 [Plan:1.1] Keep the existing Java 21/Spring Boot 3.5.6 baseline and pin Testcontainers to a Docker Desktop-compatible version in `backend/pom.xml`; retain the web, security/JWT, JPA, validation, MySQL, Flyway, JUnit 5, Mockito, and H2 test dependencies.
+- [x] T002 [P] [Plan:1.2] Configure `backend/src/main/resources/application.properties` to require runtime MySQL credentials and JWT signing, issuer, and audience configuration; enable Flyway and schema validation without embedded secrets.
+- [x] T003 [Plan:1.3] Add a multi-stage non-root `backend/Dockerfile`, `backend/.dockerignore`, root `.gitignore`, `.env.example`, and `compose.yaml` for the backend and MySQL, with required environment variables, health checks, and no embedded secrets.
 
 ### Phase 2: Foundational Authentication and Persistence
 
-- [ ] T004 [Plan:2.1] Create `backend/src/test/java/com/smartinvest/backend/support/AbstractMysqlIntegrationTest.java` with MySQL Testcontainers lifecycle, dynamic datasource configuration, migration setup, cleanup, and an H2-only fallback profile.
-- [ ] T005 [P] [Plan:2.3] Write `backend/src/test/java/com/smartinvest/backend/service/AuthServiceTest.java` for registration, normalized unique email, BCrypt hashing, generic invalid-credential errors, and logout revocation; verify behavior assertions fail before implementation.
-- [ ] T006 [P] [Plan:2.3] Write `backend/src/test/java/com/smartinvest/backend/security/JwtServiceTest.java` for signature, subject/JTI, issuer/audience, expiry, and revoked-token validation; verify behavior assertions fail before implementation.
-- [ ] T007 [Plan:2.3] Write `backend/src/test/java/com/smartinvest/backend/controller/AuthApiIntegrationTest.java` for register -> login -> protected request -> logout -> rejected token.
-- [ ] T008 [Plan:2.2] Add `backend/src/main/resources/db/migration/V1__create_auth_stock_watchlist_tables.sql` with users, revoked tokens, stock catalog, watchlist entries, foreign keys, unique email, and unique per-user stock constraints.
-- [ ] T009 [Plan:2.2] Implement `User.java`, `RevokedToken.java`, `UserRepository.java`, and `RevokedTokenRepository.java` under `backend/src/main/java/com/smartinvest/backend/` to match `data-model.md`.
-- [ ] T010 [Plan:2.3] Implement `AuthService.java` and `JwtService.java` under `backend/src/main/java/com/smartinvest/backend/service/` and `security/` for account creation, credential verification, token issuance, and revocation.
-- [ ] T011 [Plan:2.3] Add `RegisterRequest.java`, `LoginRequest.java`, `UserProfileResponse.java`, and `AuthTokenResponse.java` under `backend/src/main/java/com/smartinvest/backend/dto/`, plus `backend/src/main/java/com/smartinvest/backend/controller/AuthController.java` for the documented auth routes.
-- [ ] T012 [Plan:2.4] Update `backend/src/main/java/com/smartinvest/backend/config/SecurityConfig.java` to permit register/login, authenticate logout and other API routes with JWT, validate signature/expiry/issuer/audience/revocation, and derive user identity from the verified principal.
-- [ ] T013 [Plan:2.4] Add `backend/src/main/java/com/smartinvest/backend/exception/ApiExceptionHandler.java` to map validation, duplicate-email, invalid-credential, revoked-token, and dependency failures to safe Problem Details responses.
+- [x] T004 [Plan:2.1] Create `backend/src/test/java/com/smartinvest/backend/support/AbstractMysqlIntegrationTest.java` with MySQL Testcontainers lifecycle, dynamic datasource configuration, migration setup, cleanup, and an H2-only fallback profile.
+- [x] T005 [P] [Plan:2.3] Write `backend/src/test/java/com/smartinvest/backend/service/AuthServiceTest.java` for registration, normalized unique email, BCrypt hashing, generic invalid-credential errors, and logout revocation; verify behavior assertions fail before implementation.
+- [x] T006 [P] [Plan:2.3] Write `backend/src/test/java/com/smartinvest/backend/security/JwtServiceTest.java` for signature, subject/JTI, issuer/audience, expiry, and revoked-token validation; verify behavior assertions fail before implementation.
+- [x] T007 [Plan:2.3] Write `backend/src/test/java/com/smartinvest/backend/controller/AuthApiIntegrationTest.java` for register -> login -> protected request -> logout -> rejected token.
+- [x] T008 [Plan:2.2] Add `backend/src/main/resources/db/migration/V1__create_auth_stock_watchlist_tables.sql` with users, revoked tokens, stock catalog, watchlist entries, foreign keys, unique email, and unique per-user stock constraints.
+- [x] T009 [Plan:2.2] Implement `User.java`, `RevokedToken.java`, `UserRepository.java`, and `RevokedTokenRepository.java` under `backend/src/main/java/com/smartinvest/backend/` to match `data-model.md`.
+- [x] T010 [Plan:2.3] Implement `AuthService.java` and `JwtService.java` under `backend/src/main/java/com/smartinvest/backend/service/` and `security/` for account creation, credential verification, token issuance, and revocation.
+- [x] T011 [Plan:2.3] Add `RegisterRequest.java`, `LoginRequest.java`, `UserProfileResponse.java`, and `AuthTokenResponse.java` under `backend/src/main/java/com/smartinvest/backend/dto/`, plus `backend/src/main/java/com/smartinvest/backend/controller/AuthController.java` for the documented auth routes.
+- [x] T012 [Plan:2.4] Update `backend/src/main/java/com/smartinvest/backend/config/SecurityConfig.java` to permit register/login, authenticate logout and other API routes with JWT, validate signature/expiry/issuer/audience/revocation, and derive user identity from the verified principal.
+- [x] T013 [Plan:2.4] Add `backend/src/main/java/com/smartinvest/backend/exception/ApiExceptionHandler.java` to map validation, duplicate-email, invalid-credential, revoked-token, and dependency failures to safe Problem Details responses.
 
 ### Phase 3: User Story 1 - Add a Stock
 
-- [ ] T014 [P] [US1] [Plan:3.1] Write `backend/src/test/java/com/smartinvest/backend/service/StockCatalogServiceTest.java` for canonical symbols, active/unknown stocks, case-insensitive search inputs, and unavailable catalog errors.
-- [ ] T015 [P] [US1] [Plan:3.1] Write `backend/src/test/java/com/smartinvest/backend/service/WatchlistServiceTest.java` for add success, owner identity, duplicate symbols, and database uniqueness conflict mapping.
-- [ ] T016 [US1] [Plan:3.2] Write `backend/src/test/java/com/smartinvest/backend/controller/WatchlistApiIntegrationTest.java` cases for add success, malformed/unknown symbol, duplicate response, and persisted read-back.
-- [ ] T017 [US1] [Plan:3.1] Implement `Stock.java`, `WatchlistEntry.java`, `StockRepository.java`, and `WatchlistEntryRepository.java` in the backend entity/repository packages, including the owner-scoped lookup and unique-constraint behavior.
-- [ ] T018 [US1] [Plan:3.1] Implement `StockCatalogService.java` and `WatchlistService.java` for active catalog validation, symbol normalization, and atomic owner-scoped add behavior.
-- [ ] T019 [US1] [Plan:3.2] Add `AddWatchlistStockRequest.java`, `StockSummaryResponse.java`, and `WatchlistEntryResponse.java` under `backend/src/main/java/com/smartinvest/backend/dto/`, plus `backend/src/main/java/com/smartinvest/backend/controller/WatchlistController.java` with documented `POST /api/v1/watchlist` responses.
+- [x] T014 [P] [US1] [Plan:3.1] Write `backend/src/test/java/com/smartinvest/backend/service/StockCatalogServiceTest.java` for canonical symbols, active/unknown stocks, case-insensitive search inputs, and unavailable catalog errors.
+- [x] T015 [P] [US1] [Plan:3.1] Write `backend/src/test/java/com/smartinvest/backend/service/WatchlistServiceTest.java` for add success, owner identity, duplicate symbols, and database uniqueness conflict mapping.
+- [x] T016 [US1] [Plan:3.2] Write `backend/src/test/java/com/smartinvest/backend/controller/WatchlistApiIntegrationTest.java` cases for add success, malformed/unknown symbol, duplicate response, and persisted read-back.
+- [x] T017 [US1] [Plan:3.1] Implement `Stock.java`, `WatchlistEntry.java`, `StockRepository.java`, and `WatchlistEntryRepository.java` in the backend entity/repository packages, including the owner-scoped lookup and unique-constraint behavior.
+- [x] T018 [US1] [Plan:3.1] Implement `StockCatalogService.java` and `WatchlistService.java` for active catalog validation, symbol normalization, and atomic owner-scoped add behavior.
+- [x] T019 [US1] [Plan:3.2] Add `AddWatchlistStockRequest.java`, `StockSummaryResponse.java`, and `WatchlistEntryResponse.java` under `backend/src/main/java/com/smartinvest/backend/dto/`, plus `backend/src/main/java/com/smartinvest/backend/controller/WatchlistController.java` with documented `POST /api/v1/watchlist` responses.
 
 ### Phase 4: User Story 2 - View and Remove Stocks
 
-- [ ] T020 [P] [US2] [Plan:4.1] Write `backend/src/test/java/com/smartinvest/backend/service/WatchlistQueryServiceTest.java` for empty/populated lists, newest-first order, owner isolation, successful removal, and missing-entry behavior.
-- [ ] T021 [US2] [Plan:4.2] Extend `backend/src/test/java/com/smartinvest/backend/controller/WatchlistApiIntegrationTest.java` with cross-user visibility/removal checks and add -> view -> remove -> verify-absent flow.
-- [ ] T022 [US2] [Plan:4.1] Implement owner-scoped list and delete operations in `WatchlistEntryRepository.java` and `WatchlistService.java`; return not-found without disclosing other users' entries.
-- [ ] T023 [US2] [Plan:4.2] Extend `backend/src/main/java/com/smartinvest/backend/controller/WatchlistController.java` with `GET /api/v1/watchlist` and `DELETE /api/v1/watchlist/{symbol}` and add `RemoveWatchlistStockResponse.java` under `backend/src/main/java/com/smartinvest/backend/dto/`.
+- [x] T020 [P] [US2] [Plan:4.1] Write service tests for empty/populated lists, owner isolation, successful removal, and missing-entry behavior in `backend/src/test/java/com/smartinvest/backend/service/WatchlistServiceTest.java`.
+- [x] T021 [US2] [Plan:4.2] Extend `backend/src/test/java/com/smartinvest/backend/controller/WatchlistApiIntegrationTest.java` with cross-user visibility/removal checks and add -> view -> remove -> verify-absent flow.
+- [x] T022 [US2] [Plan:4.1] Implement owner-scoped list and delete operations in `WatchlistEntryRepository.java` and `WatchlistService.java`; return not-found without disclosing other users' entries.
+- [x] T023 [US2] [Plan:4.2] Extend `backend/src/main/java/com/smartinvest/backend/controller/WatchlistController.java` with `GET /api/v1/watchlist` and `DELETE /api/v1/watchlist/{symbol}` and add `RemoveWatchlistStockResponse.java` under `backend/src/main/java/com/smartinvest/backend/dto/`.
 
 ### Phase 5: User Story 3 - Search Stocks
 
-- [ ] T024 [US3] [Plan:5.1] Extend `backend/src/test/java/com/smartinvest/backend/service/StockCatalogServiceTest.java` with matching, blank-query rejection, page/size bounds, inactive-stock exclusion, and deterministic ordering.
-- [ ] T025 [US3] [Plan:5.2] Add `backend/src/test/java/com/smartinvest/backend/controller/StockSearchApiIntegrationTest.java` for symbol/name search, empty matches, blank query, pagination, and 1,000-row search timing.
-- [ ] T026 [US3] [Plan:5.1] Implement paginated case-insensitive catalog queries in `StockRepository.java` and `StockCatalogService.java`, enforcing the OpenAPI page and size limits.
-- [ ] T027 [US3] [Plan:5.2] Add `StockSearchPageResponse.java` under `backend/src/main/java/com/smartinvest/backend/dto/` and `backend/src/main/java/com/smartinvest/backend/controller/StockController.java` with `GET /api/v1/stocks/search`.
+- [x] T024 [US3] [Plan:5.1] Extend `backend/src/test/java/com/smartinvest/backend/service/StockCatalogServiceTest.java` with matching, blank-query rejection, page/size bounds, inactive-stock exclusion, and deterministic ordering.
+- [x] T025 [US3] [Plan:5.2] Add `backend/src/test/java/com/smartinvest/backend/controller/StockSearchApiIntegrationTest.java` for symbol/name search, empty matches, blank query, pagination, and 1,000-row search timing.
+- [x] T026 [US3] [Plan:5.1] Implement paginated case-insensitive catalog queries in `StockRepository.java` and `StockCatalogService.java`, enforcing the OpenAPI page and size limits.
+- [x] T027 [US3] [Plan:5.2] Add `StockSearchPageResponse.java` under `backend/src/main/java/com/smartinvest/backend/dto/` and `backend/src/main/java/com/smartinvest/backend/controller/StockController.java` with `GET /api/v1/stocks/search`.
 
 ### Phase 6: Cross-Cutting Verification
 
-- [ ] T028 [Plan:6.1] Run `.\backend\mvnw.cmd -f backend\pom.xml clean verify` from the repository root; report unit, integration, and skipped test counts and confirm test-first red/green evidence.
-- [ ] T029 [Plan:6.1] Build and start the backend/MySQL stack with `docker compose -f compose.yaml up --build`; verify health checks, migrations, runtime-only secrets, and catalog-preload behavior using the Docker Desktop engine.
+- [x] T028 [Plan:6.1] Run backend verification; report unit, integration, and skipped test counts and confirm test-first evidence. A clean build was attempted but the Maven clean phase could not remove a locked `backend/target` directory.
+- [x] T029 [Plan:6.1] Build and start the backend/MySQL stack with `docker compose -f compose.yaml up --build`; verify health checks, migrations, runtime-only secrets, non-root execution, and empty-catalog behavior using the Docker Desktop engine.
 
 ## Requirement Mapping
 

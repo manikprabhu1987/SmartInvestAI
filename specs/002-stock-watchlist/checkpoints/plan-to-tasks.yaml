@@ -19,7 +19,7 @@ phases:
         description: "Align backend dependencies and build"
         tasks:
           - task_id: "T001"
-            description: "Align backend Maven dependencies and framework version"
+            description: "Retain Java 21/Spring Boot 3.5.6 and pin Docker-compatible Testcontainers"
       - item_id: "1.2"
         description: "Configure persistent runtime settings"
         tasks:
@@ -29,7 +29,7 @@ phases:
         description: "Add Docker runtime configuration"
         tasks:
           - task_id: "T003"
-            description: "Add non-root multi-stage Dockerfile, dockerignore, and backend/MySQL Compose stack"
+            description: "Add non-root Dockerfile, ignore files, env example, and backend/MySQL Compose stack"
   - phase_id: "Phase-2"
     phase_name: "Foundational Authentication and Persistence"
     items:
