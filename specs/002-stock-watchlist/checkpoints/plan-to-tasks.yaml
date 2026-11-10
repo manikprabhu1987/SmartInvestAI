@@ -1,0 +1,200 @@
+metadata:
+  generated: "2026-11-09"
+  source_plan: "specs/002-stock-watchlist/plan.md"
+  target_tasks: "specs/002-stock-watchlist/plan.md#task-breakdown"
+
+summary:
+  total_plan_items: 14
+  covered_plan_items: 14
+  missing_plan_items: 0
+  coverage_percentage: 100.0
+  total_tasks_generated: 29
+  orphan_tasks: 0
+
+phases:
+  - phase_id: "Phase-1"
+    phase_name: "Setup"
+    items:
+      - item_id: "1.1"
+        description: "Align backend dependencies and build"
+        tasks:
+          - task_id: "T001"
+            description: "Retain Java 21/Spring Boot 3.5.6 and pin Docker-compatible Testcontainers"
+      - item_id: "1.2"
+        description: "Configure persistent runtime settings"
+        tasks:
+          - task_id: "T002"
+            description: "Configure MySQL and JWT signing, issuer, and audience settings"
+      - item_id: "1.3"
+        description: "Add Docker runtime configuration"
+        tasks:
+          - task_id: "T003"
+            description: "Add non-root Dockerfile, ignore files, env example, and backend/MySQL Compose stack"
+  - phase_id: "Phase-2"
+    phase_name: "Foundational Authentication and Persistence"
+    items:
+      - item_id: "2.1"
+        description: "Establish test infrastructure"
+        tasks:
+          - task_id: "T004"
+            description: "Create MySQL Testcontainers integration-test base and fallback"
+      - item_id: "2.2"
+        description: "Create persistence schema and authentication model"
+        tasks:
+          - task_id: "T008"
+            description: "Add Flyway migration for authentication, stock, and watchlist tables"
+          - task_id: "T009"
+            description: "Implement User and RevokedToken entities and repositories"
+      - item_id: "2.3"
+        description: "Implement registration, login, and JWT lifecycle"
+        tasks:
+          - task_id: "T005"
+            description: "Write AuthService unit tests first"
+          - task_id: "T006"
+            description: "Write JWT signature, issuer, audience, expiry, and revocation tests first"
+          - task_id: "T007"
+            description: "Write end-to-end auth API test first"
+          - task_id: "T010"
+            description: "Implement account and JWT service behavior"
+          - task_id: "T011"
+            description: "Implement authentication DTOs and endpoints"
+      - item_id: "2.4"
+        description: "Secure routes and standardize errors"
+        tasks:
+          - task_id: "T012"
+            description: "Validate JWT claims and configure stateless security with principal-derived ownership"
+          - task_id: "T013"
+            description: "Map expected failures to Problem Details"
+  - phase_id: "Phase-3"
+    phase_name: "User Story 1 - Add a Stock"
+    items:
+      - item_id: "3.1"
+        description: "Implement stock and watchlist persistence rules"
+        tasks:
+          - task_id: "T014"
+            description: "Write stock-catalog service unit tests first"
+          - task_id: "T015"
+            description: "Write watchlist service unit tests first"
+          - task_id: "T017"
+            description: "Implement stock/watchlist entities and repositories"
+          - task_id: "T018"
+            description: "Implement stock validation and watchlist service"
+      - item_id: "3.2"
+        description: "Expose the add-stock API"
+        tasks:
+          - task_id: "T016"
+            description: "Write add-stock API integration tests first"
+          - task_id: "T019"
+            description: "Implement POST /api/v1/watchlist"
+  - phase_id: "Phase-4"
+    phase_name: "User Story 2 - View and Remove Stocks"
+    items:
+      - item_id: "4.1"
+        description: "Implement list and remove service behavior"
+        tasks:
+          - task_id: "T020"
+            description: "Write list/remove service tests first"
+          - task_id: "T022"
+            description: "Implement owner-scoped list and delete service methods"
+      - item_id: "4.2"
+        description: "Expose view and remove APIs"
+        tasks:
+          - task_id: "T021"
+            description: "Add owner-isolation and list/remove API tests"
+          - task_id: "T023"
+            description: "Implement GET and DELETE watchlist endpoints"
+  - phase_id: "Phase-5"
+    phase_name: "User Story 3 - Search Stocks"
+    items:
+      - item_id: "5.1"
+        description: "Implement catalog search behavior"
+        tasks:
+          - task_id: "T024"
+            description: "Write search service tests first"
+          - task_id: "T026"
+            description: "Implement paginated catalog search"
+      - item_id: "5.2"
+        description: "Expose the stock search API"
+        tasks:
+          - task_id: "T025"
+            description: "Write stock-search API tests first"
+          - task_id: "T027"
+            description: "Implement GET /api/v1/stocks/search"
+  - phase_id: "Phase-6"
+    phase_name: "Cross-Cutting Verification"
+    items:
+      - item_id: "6.1"
+        description: "Verify contracts, persistence, and runtime delivery"
+        tasks:
+          - task_id: "T028"
+            description: "Run backend verify and report test outcomes"
+          - task_id: "T029"
+            description: "Verify Docker runtime, migrations, secrets, and catalog prerequisite"
+
+missing_plan_items: []
+orphan_tasks: []
+
+upstream_trace:
+  - plan_item: "1.1"
+    source_requirements: ["REQ-009", "REQ-012", "REQ-014", "REQ-016"]
+    tasks: ["T001"]
+    full_trace: "REQ-009,REQ-012,REQ-014,REQ-016 -> Phase-1.1 -> T001"
+  - plan_item: "1.2"
+    source_requirements: ["REQ-010", "REQ-013", "REQ-014", "REQ-015"]
+    tasks: ["T002"]
+    full_trace: "REQ-010,REQ-013,REQ-014,REQ-015 -> Phase-1.2 -> T002"
+  - plan_item: "1.3"
+    source_requirements: ["REQ-010"]
+    tasks: ["T003"]
+    full_trace: "REQ-010 -> Phase-1.3 -> T003"
+  - plan_item: "2.1"
+    source_requirements: ["REQ-012", "REQ-016"]
+    tasks: ["T004"]
+    full_trace: "REQ-012,REQ-016 -> Phase-2.1 -> T004"
+  - plan_item: "2.2"
+    source_requirements: ["REQ-010", "REQ-013", "REQ-015"]
+    tasks: ["T008", "T009"]
+    full_trace: "REQ-010,REQ-013,REQ-015 -> Phase-2.2 -> T008,T009"
+  - plan_item: "2.3"
+    source_requirements: ["REQ-013", "REQ-014", "REQ-015", "REQ-016"]
+    tasks: ["T005", "T006", "T007", "T010", "T011"]
+    full_trace: "REQ-013,REQ-014,REQ-015,REQ-016 -> Phase-2.3 -> T005,T006,T007,T010,T011"
+  - plan_item: "2.4"
+    source_requirements: ["REQ-008", "REQ-011", "REQ-014", "REQ-015"]
+    tasks: ["T012", "T013"]
+    full_trace: "REQ-008,REQ-011,REQ-014,REQ-015 -> Phase-2.4 -> T012,T013"
+  - plan_item: "3.1"
+    source_requirements: ["REQ-001", "REQ-002", "REQ-003", "REQ-010", "REQ-011"]
+    tasks: ["T014", "T015", "T017", "T018"]
+    full_trace: "REQ-001,REQ-002,REQ-003,REQ-010,REQ-011 -> Phase-3.1 -> T014,T015,T017,T018"
+  - plan_item: "3.2"
+    source_requirements: ["REQ-001", "REQ-002", "REQ-003", "REQ-008", "REQ-009", "REQ-012"]
+    tasks: ["T016", "T019"]
+    full_trace: "REQ-001,REQ-002,REQ-003,REQ-008,REQ-009,REQ-012 -> Phase-3.2 -> T016,T019"
+  - plan_item: "4.1"
+    source_requirements: ["REQ-004", "REQ-005", "REQ-008", "REQ-011", "REQ-012"]
+    tasks: ["T020", "T022"]
+    full_trace: "REQ-004,REQ-005,REQ-008,REQ-011,REQ-012 -> Phase-4.1 -> T020,T022"
+  - plan_item: "4.2"
+    source_requirements: ["REQ-004", "REQ-005", "REQ-008", "REQ-009", "REQ-011", "REQ-012"]
+    tasks: ["T021", "T023"]
+    full_trace: "REQ-004,REQ-005,REQ-008,REQ-009,REQ-011,REQ-012 -> Phase-4.2 -> T021,T023"
+  - plan_item: "5.1"
+    source_requirements: ["REQ-006", "REQ-007", "REQ-008", "REQ-010"]
+    tasks: ["T024", "T026"]
+    full_trace: "REQ-006,REQ-007,REQ-008,REQ-010 -> Phase-5.1 -> T024,T026"
+  - plan_item: "5.2"
+    source_requirements: ["REQ-006", "REQ-007", "REQ-008", "REQ-009", "REQ-012"]
+    tasks: ["T025", "T027"]
+    full_trace: "REQ-006,REQ-007,REQ-008,REQ-009,REQ-012 -> Phase-5.2 -> T025,T027"
+  - plan_item: "6.1"
+    source_requirements: ["REQ-002", "REQ-006", "REQ-008", "REQ-010", "REQ-011", "REQ-012", "REQ-016"]
+    tasks: ["T028", "T029"]
+    full_trace: "REQ-002,REQ-006,REQ-008,REQ-010,REQ-011,REQ-012,REQ-016 -> Phase-6.1 -> T028,T029"
+
+validation:
+  passed: true
+  errors: []
+  warnings:
+    - "Docker is unavailable on the planning machine; MySQL Testcontainers must run in a Docker-capable environment."
+    - "Production stock-catalog data source/import remains an operational prerequisite."

@@ -1,0 +1,9 @@
+unit: smartinvest-home-page
+bindings:
+  - type: convention
+    name: "React root renders App"
+    source_loc: "frontend/src/main.tsx:6"
+    target: "App"
+    must_appear_in_target: true
+    notes: "Mounts the application component inside React StrictMode."
+runtime_config: []

@@ -1,0 +1,487 @@
+metadata:
+  generated: "2026-11-10"
+  source_tasks: "specs/003-react-frontend/plan.md"
+  last_updated: "2026-11-10"
+
+summary:
+  total_tasks: 31
+  completed_tasks: 31
+  in_progress_tasks: 0
+  pending_tasks: 0
+  completion_percentage: 100.0
+  verification:
+    unit_and_component_tests: "33 passed, 0 failed"
+    browser_tests: "5 passed, 0 failed"
+    production_build: "passed"
+    lint: "passed with 4 non-blocking warnings"
+    docker_image_and_runtime: "passed"
+
+tasks:
+  - task_id: "T001"
+    description: "Align frontend dependencies, scripts, and project configuration"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "frontend/package.json"
+          changes: ["Added app, test, browser-test, build, and lint dependencies/scripts"]
+        - file: "frontend/package-lock.json"
+          changes: ["Synchronized locked dependency versions"]
+        - file: "frontend/.gitignore"
+          changes: ["Ignored local environment, test, and build artifacts"]
+        - file: "frontend/README.md"
+          changes: ["Documented development and Docker workflows"]
+    upstream_trace:
+      plan_item: "1.1"
+      requirements: ["REQ-014", "REQ-017", "REQ-018"]
+      full_trace: "REQ-014/017/018 -> Plan 1.1 -> T001 -> frontend package and project setup"
+  - task_id: "T002"
+    description: "Configure Vitest and add application startup coverage"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "frontend/vite.config.ts"
+          changes: ["Configured Vitest, jsdom, test setup, and API proxy"]
+        - file: "frontend/src/test/setup.ts"
+          changes: ["Added DOM cleanup and matchMedia test support"]
+        - file: "frontend/src/App.test.tsx"
+          changes: ["Added application startup smoke test"]
+    upstream_trace:
+      plan_item: "1.1"
+      requirements: ["REQ-014", "REQ-017"]
+      full_trace: "REQ-017 -> Plan 1.1 -> T002 -> Vitest setup and smoke test"
+  - task_id: "T003"
+    description: "Define typed frontend API contracts"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "frontend/src/api/types.ts"
+          changes: ["Defined auth, stock, watchlist, pagination, and API problem types"]
+    upstream_trace:
+      plan_item: "1.2"
+      requirements: ["REQ-004", "REQ-013", "REQ-018"]
+      full_trace: "REQ-004/013 -> Plan 1.2 -> T003 -> typed API contracts"
+  - task_id: "T004"
+    description: "Validate runtime API origin parsing"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "frontend/src/api/apiConfig.ts"
+          changes: ["Validated and normalized runtime and development API origins"]
+        - file: "frontend/src/api/apiConfig.test.ts"
+          changes: ["Covered origin normalization, environment fallback, and rejected unsafe configuration"]
+    upstream_trace:
+      plan_item: "1.2"
+      requirements: ["REQ-004", "REQ-018"]
+      full_trace: "REQ-004/018 -> Plan 1.2 -> T004 -> runtime API origin validation"
+  - task_id: "T005"
+    description: "Test shared API client authorization and error behavior"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "frontend/src/api/httpClient.test.ts"
+          changes: ["Covered bearer scoping, unauthorized handling, and safe API error extraction"]
+    upstream_trace:
+      plan_item: "2.1"
+      requirements: ["REQ-004", "REQ-006", "REQ-013"]
+      full_trace: "REQ-004/006/013 -> Plan 2.1 -> T005 -> HTTP client tests"
+  - task_id: "T006"
+    description: "Implement shared HTTP client and typed endpoint methods"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "frontend/src/api/httpClient.ts"
+          changes: ["Scoped bearer tokens to the configured API origin and mapped API errors"]
+        - file: "frontend/src/api/authApi.ts"
+          changes: ["Added registration, login, and logout methods"]
+        - file: "frontend/src/api/stockApi.ts"
+          changes: ["Added paginated stock search method"]
+        - file: "frontend/src/api/watchlistApi.ts"
+          changes: ["Added watchlist read, add, and remove methods"]
+    upstream_trace:
+      plan_item: "2.1"
+      requirements: ["REQ-004", "REQ-006", "REQ-013"]
+      full_trace: "REQ-004/006/013 -> Plan 2.1 -> T006 -> shared typed API boundary"
+  - task_id: "T007"
+    description: "Build the shared application shell"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "frontend/src/app/AppShell.tsx"
+          changes: ["Added responsive navigation, theme control, and logout action"]
+        - file: "frontend/src/App.tsx"
+          changes: ["Composed theme, auth, and router providers"]
+        - file: "frontend/src/index.css"
+          changes: ["Replaced starter styles with app base styling"]
+    upstream_trace:
+      plan_item: "2.2"
+      requirements: ["REQ-007", "REQ-014"]
+      full_trace: "REQ-007/014 -> Plan 2.2 -> T007 -> application shell"
+  - task_id: "T008"
+    description: "Test protected route behavior"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "frontend/src/app/ProtectedRoute.test.tsx"
+          changes: ["Covered anonymous redirects and authenticated access"]
+        - file: "frontend/src/app/ProtectedRoute.tsx"
+          changes: ["Enforced authenticated route access"]
+    upstream_trace:
+      plan_item: "2.2"
+      requirements: ["REQ-007", "REQ-017"]
+      full_trace: "REQ-007/017 -> Plan 2.2 -> T008 -> protected route tests and guard"
+  - task_id: "T009"
+    description: "Test registration validation and outcomes"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "frontend/src/auth/RegisterPage.test.tsx"
+          changes: ["Covered registration success and backend error behavior"]
+        - file: "frontend/src/auth/validation.test.ts"
+          changes: ["Covered registration input validation"]
+    upstream_trace:
+      plan_item: "3.1"
+      requirements: ["REQ-001", "REQ-013", "REQ-017"]
+      full_trace: "REQ-001/013/017 -> Plan 3.1 -> T009 -> registration tests"
+  - task_id: "T010"
+    description: "Implement registration form and validation"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "frontend/src/auth/RegisterPage.tsx"
+          changes: ["Added registration form, accessible errors, and login handoff"]
+        - file: "frontend/src/auth/validation.ts"
+          changes: ["Added client-side registration validation"]
+    upstream_trace:
+      plan_item: "3.1"
+      requirements: ["REQ-001", "REQ-013"]
+      full_trace: "REQ-001/013 -> Plan 3.1 -> T010 -> registration workflow"
+  - task_id: "T011"
+    description: "Test session and authentication lifecycle"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "frontend/src/auth/AuthProvider.test.tsx"
+          changes: ["Covered session persistence, expiration, logout, and unauthorized cleanup"]
+        - file: "frontend/src/auth/sessionStorage.test.ts"
+          changes: ["Covered session storage behavior"]
+    upstream_trace:
+      plan_item: "3.2"
+      requirements: ["REQ-003", "REQ-005", "REQ-006", "REQ-017"]
+      full_trace: "REQ-003/005/006/017 -> Plan 3.2 -> T011 -> auth lifecycle tests"
+  - task_id: "T012"
+    description: "Implement session-only authentication state"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "frontend/src/auth/sessionStorage.ts"
+          changes: ["Stored only the active session token and user profile"]
+        - file: "frontend/src/auth/AuthProvider.tsx"
+          changes: ["Implemented login, registration, logout, expiration, and unauthorized cleanup"]
+    upstream_trace:
+      plan_item: "3.2"
+      requirements: ["REQ-003", "REQ-005", "REQ-006", "REQ-007"]
+      full_trace: "REQ-003/005/006/007 -> Plan 3.2 -> T012 -> session lifecycle"
+  - task_id: "T013"
+    description: "Wire authentication pages and application routes"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "frontend/src/auth/LoginPage.tsx"
+          changes: ["Added sign-in form and safe backend error handling"]
+        - file: "frontend/src/app/AppRouter.tsx"
+          changes: ["Added public auth routes and protected application routes"]
+        - file: "frontend/src/app/ProtectedRoute.tsx"
+          changes: ["Preserved protected destination for sign-in"]
+    upstream_trace:
+      plan_item: "2.2, 3.1, 3.2"
+      requirements: ["REQ-002", "REQ-007", "REQ-013"]
+      full_trace: "REQ-002/007/013 -> Plans 2.2/3.1/3.2 -> T013 -> auth routes"
+  - task_id: "T014"
+    description: "Verify authentication browser journeys"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "frontend/tests/e2e/auth.spec.ts"
+          changes: ["Verified registration, login, protected access, logout, and invalid credentials"]
+        - file: "frontend/playwright.config.ts"
+          changes: ["Configured Playwright browser execution"]
+    upstream_trace:
+      plan_item: "3.1, 3.2"
+      requirements: ["REQ-001", "REQ-002", "REQ-003", "REQ-005", "REQ-007"]
+      full_trace: "REQ-001/002/003/005/007 -> Plans 3.1/3.2 -> T014 -> authentication E2E"
+  - task_id: "T015"
+    description: "Test watchlist state and confirmed mutations"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "frontend/src/watchlist/useWatchlist.test.tsx"
+          changes: ["Covered list loading, successful add, and failed removal"]
+    upstream_trace:
+      plan_item: "4.1"
+      requirements: ["REQ-008", "REQ-009", "REQ-010", "REQ-017"]
+      full_trace: "REQ-008/009/010/017 -> Plan 4.1 -> T015 -> watchlist state tests"
+  - task_id: "T016"
+    description: "Implement typed watchlist view state"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "frontend/src/watchlist/useWatchlist.ts"
+          changes: ["Loaded authenticated list and applied successful mutations only"]
+        - file: "frontend/src/api/watchlistApi.ts"
+          changes: ["Implemented typed watchlist API operations"]
+    upstream_trace:
+      plan_item: "4.1"
+      requirements: ["REQ-008", "REQ-009", "REQ-010"]
+      full_trace: "REQ-008/009/010 -> Plan 4.1 -> T016 -> watchlist state and API"
+  - task_id: "T017"
+    description: "Build watchlist view and add-stock form"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "frontend/src/watchlist/WatchlistPage.tsx"
+          changes: ["Added loading, empty, list, and removal confirmation views"]
+        - file: "frontend/src/watchlist/AddStockForm.tsx"
+          changes: ["Added symbol input, validation, and actionable responses"]
+    upstream_trace:
+      plan_item: "4.2"
+      requirements: ["REQ-008", "REQ-009", "REQ-013", "REQ-014"]
+      full_trace: "REQ-008/009/013/014 -> Plan 4.2 -> T017 -> watchlist UI"
+  - task_id: "T018"
+    description: "Test confirmed watchlist removal"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "frontend/src/watchlist/WatchlistPage.test.tsx"
+          changes: ["Covered successful removal, failed removal, and blank symbol validation"]
+        - file: "frontend/src/watchlist/WatchlistPage.tsx"
+          changes: ["Kept failed removals visible and reported errors"]
+    upstream_trace:
+      plan_item: "4.2"
+      requirements: ["REQ-010", "REQ-013", "REQ-017"]
+      full_trace: "REQ-010/013/017 -> Plan 4.2 -> T018 -> removal coverage"
+  - task_id: "T019"
+    description: "Verify watchlist browser journey"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "frontend/tests/e2e/watchlist.spec.ts"
+          changes: ["Verified authenticated add and confirmed remove flows"]
+    upstream_trace:
+      plan_item: "4.2"
+      requirements: ["REQ-008", "REQ-009", "REQ-010"]
+      full_trace: "REQ-008/009/010 -> Plan 4.2 -> T019 -> watchlist E2E"
+  - task_id: "T020"
+    description: "Test stock search and pagination state"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "frontend/src/stocks/useStockSearch.test.tsx"
+          changes: ["Covered query, page, empty results, stale requests, and errors"]
+    upstream_trace:
+      plan_item: "5.1"
+      requirements: ["REQ-011", "REQ-012", "REQ-013", "REQ-017"]
+      full_trace: "REQ-011/012/013/017 -> Plan 5.1 -> T020 -> search state tests"
+  - task_id: "T021"
+    description: "Implement paginated stock search state"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "frontend/src/stocks/useStockSearch.ts"
+          changes: ["Implemented bounded paging, request ordering, and search errors"]
+        - file: "frontend/src/api/stockApi.ts"
+          changes: ["Implemented typed stock search requests"]
+    upstream_trace:
+      plan_item: "5.1"
+      requirements: ["REQ-011", "REQ-012", "REQ-013"]
+      full_trace: "REQ-011/012/013 -> Plan 5.1 -> T021 -> search state"
+  - task_id: "T022"
+    description: "Build stock search and result presentation"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "frontend/src/stocks/StockSearchPage.tsx"
+          changes: ["Added query, paging controls, result, empty, loading, and error states"]
+        - file: "frontend/src/stocks/SearchResults.tsx"
+          changes: ["Added canonical result summary and add action"]
+    upstream_trace:
+      plan_item: "5.2"
+      requirements: ["REQ-009", "REQ-011", "REQ-012", "REQ-014"]
+      full_trace: "REQ-009/011/012/014 -> Plan 5.2 -> T022 -> stock search UI"
+  - task_id: "T023"
+    description: "Test search result add and page navigation"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "frontend/src/stocks/StockSearchPage.test.tsx"
+          changes: ["Covered search results, pagination, and canonical add behavior"]
+    upstream_trace:
+      plan_item: "5.2, 4.2"
+      requirements: ["REQ-009", "REQ-011", "REQ-012", "REQ-017"]
+      full_trace: "REQ-009/011/012/017 -> Plans 5.2/4.2 -> T023 -> search page tests"
+  - task_id: "T024"
+    description: "Verify search and add-from-search browser journey"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "frontend/tests/e2e/watchlist.spec.ts"
+          changes: ["Verified catalog search, pagination, and add of canonical result symbol"]
+    upstream_trace:
+      plan_item: "5.2"
+      requirements: ["REQ-009", "REQ-011", "REQ-012"]
+      full_trace: "REQ-009/011/012 -> Plan 5.2 -> T024 -> search E2E"
+  - task_id: "T025"
+    description: "Test theme preference behavior"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "frontend/src/theme/ThemeProvider.test.tsx"
+          changes: ["Covered persisted mode, system fallback, switching, and storage"]
+    upstream_trace:
+      plan_item: "6.1"
+      requirements: ["REQ-015", "REQ-016", "REQ-017"]
+      full_trace: "REQ-015/016/017 -> Plan 6.1 -> T025 -> theme tests"
+  - task_id: "T026"
+    description: "Implement Material UI theme selection and persistence"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "frontend/src/theme/ThemeProvider.tsx"
+          changes: ["Added consistent light and dark Material UI palettes"]
+        - file: "frontend/src/theme/themePreference.ts"
+          changes: ["Stored explicit choice and honored system preference by default"]
+    upstream_trace:
+      plan_item: "6.1"
+      requirements: ["REQ-015", "REQ-016"]
+      full_trace: "REQ-015/016 -> Plan 6.1 -> T026 -> theme preference"
+  - task_id: "T027"
+    description: "Complete responsive and accessible presentation"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "frontend/src/app/AppShell.tsx"
+          changes: ["Added responsive navigation and keyboard-operable theme control"]
+        - file: "frontend/src/auth/LoginPage.tsx"
+          changes: ["Added labeled, accessible login form"]
+        - file: "frontend/src/auth/RegisterPage.tsx"
+          changes: ["Added labeled, accessible registration form"]
+        - file: "frontend/src/watchlist/WatchlistPage.tsx"
+          changes: ["Added responsive list and accessible removal confirmation"]
+        - file: "frontend/src/stocks/StockSearchPage.tsx"
+          changes: ["Added responsive search, paging, and result controls"]
+    upstream_trace:
+      plan_item: "6.2"
+      requirements: ["REQ-014", "REQ-015", "REQ-017"]
+      full_trace: "REQ-014/015/017 -> Plan 6.2 -> T027 -> responsive accessible views"
+  - task_id: "T028"
+    description: "Verify responsive layout and theme persistence in browsers"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "frontend/tests/e2e/responsive-theme.spec.ts"
+          changes: ["Checked 320, 768, and 1920 pixel widths, no overflow, and persisted theme"]
+    upstream_trace:
+      plan_item: "6.2, 6.1"
+      requirements: ["REQ-014", "REQ-015", "REQ-016"]
+      full_trace: "REQ-014/015/016 -> Plans 6.2/6.1 -> T028 -> responsive/theme E2E"
+  - task_id: "T029"
+    description: "Add runtime-configurable non-root frontend Docker image"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "frontend/Dockerfile"
+          changes: ["Built static assets in a multi-stage image and ran Nginx as UID 101"]
+        - file: "frontend/.dockerignore"
+          changes: ["Excluded local dependencies, builds, and environment files"]
+        - file: "frontend/docker/container-entrypoint.sh"
+          changes: ["Validated runtime origins and emitted runtime configuration"]
+        - file: "frontend/public/runtime-config.js"
+          changes: ["Added development same-origin default configuration"]
+        - file: "frontend/docker/nginx.conf.template"
+          changes: ["Added static serving, API proxy, and SPA fallback"]
+    upstream_trace:
+      plan_item: "7.1"
+      requirements: ["REQ-018"]
+      full_trace: "REQ-018 -> Plan 7.1 -> T029 -> runtime-configurable frontend image"
+  - task_id: "T030"
+    description: "Add Compose integration, health route, and verify static delivery"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "frontend/docker/nginx.conf.template"
+          changes: ["Added /healthz and client-side route fallback"]
+        - file: "compose.yaml"
+          changes: ["Added frontend service, runtime config, dependency health, and host port"]
+        - file: ".env.example"
+          changes: ["Documented the frontend host port"]
+        - file: "frontend/README.md"
+          changes: ["Documented local and Docker run configuration"]
+    upstream_trace:
+      plan_item: "7.1"
+      requirements: ["REQ-018"]
+      full_trace: "REQ-018 -> Plan 7.1 -> T030 -> health and Compose delivery"
+  - task_id: "T031"
+    description: "Run frontend suites and verify Docker runtime behavior"
+    status: "completed"
+    implementation:
+      files_changed:
+        - file: "frontend/tests/e2e/auth.spec.ts"
+          changes: ["Verified auth browser journeys"]
+        - file: "frontend/tests/e2e/watchlist.spec.ts"
+          changes: ["Verified watchlist and search browser journeys"]
+        - file: "frontend/tests/e2e/responsive-theme.spec.ts"
+          changes: ["Verified layout and theme behavior"]
+        - file: "specs/003-react-frontend/plan.md"
+          changes: ["Marked all 31 tasks complete and aligned Docker file paths"]
+    upstream_trace:
+      plan_item: "7.2"
+      requirements: ["REQ-001", "REQ-002", "REQ-003", "REQ-004", "REQ-005", "REQ-006", "REQ-007", "REQ-008", "REQ-009", "REQ-010", "REQ-011", "REQ-012", "REQ-013", "REQ-014", "REQ-015", "REQ-016", "REQ-017", "REQ-018"]
+      full_trace: "REQ-001..018 -> Plan 7.2 -> T031 -> test and delivery verification"
+
+pending_tasks: []
+untracked_changes: []
+
+traceability_chain:
+  - chain_id: "TRACE-AUTH"
+    requirement: "REQ-001 through REQ-007"
+    plan_phase: "Phases 2 and 3"
+    plan_item: "2.1, 2.2, 3.1, 3.2"
+    tasks: ["T005", "T006", "T007", "T008", "T009", "T010", "T011", "T012", "T013", "T014"]
+    files: ["frontend/src/api/", "frontend/src/auth/", "frontend/src/app/", "frontend/tests/e2e/auth.spec.ts"]
+    status: "complete"
+  - chain_id: "TRACE-WATCHLIST"
+    requirement: "REQ-008 through REQ-010"
+    plan_phase: "Phase 4"
+    plan_item: "4.1, 4.2"
+    tasks: ["T015", "T016", "T017", "T018", "T019"]
+    files: ["frontend/src/watchlist/", "frontend/src/api/watchlistApi.ts", "frontend/tests/e2e/watchlist.spec.ts"]
+    status: "complete"
+  - chain_id: "TRACE-SEARCH"
+    requirement: "REQ-011 through REQ-013"
+    plan_phase: "Phases 2 and 5"
+    plan_item: "2.1, 5.1, 5.2"
+    tasks: ["T005", "T006", "T020", "T021", "T022", "T023", "T024"]
+    files: ["frontend/src/api/", "frontend/src/stocks/", "frontend/tests/e2e/watchlist.spec.ts"]
+    status: "complete"
+  - chain_id: "TRACE-UX"
+    requirement: "REQ-014 through REQ-017"
+    plan_phase: "Phase 6"
+    plan_item: "6.1, 6.2"
+    tasks: ["T025", "T026", "T027", "T028"]
+    files: ["frontend/src/theme/", "frontend/src/app/", "frontend/tests/e2e/responsive-theme.spec.ts"]
+    status: "complete"
+  - chain_id: "TRACE-DOCKER"
+    requirement: "REQ-018"
+    plan_phase: "Phase 7"
+    plan_item: "7.1, 7.2"
+    tasks: ["T029", "T030", "T031"]
+    files: ["frontend/Dockerfile", "frontend/docker/", "frontend/public/runtime-config.js", "compose.yaml"]
+    status: "complete"
+
+validation:
+  passed: true
+  errors: []
+  warnings:
+    - "Oxlint exits successfully with four non-blocking React warnings in useWatchlist.ts, useStockSearch.ts, ThemeProvider.tsx, and AuthProvider.tsx."
+    - "Vite reports a 602.17 kB minified JavaScript chunk, above its 500 kB advisory threshold."
+    - "Compose configuration and the standalone frontend container were verified; the complete MySQL/backend stack was not started."
+  blocking_issues: []

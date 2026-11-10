@@ -1,0 +1,6 @@
+unit: smartinvest-home-page
+side_effects: []
+branches: []
+error_paths: []
+concurrency:
+  model: sync
